@@ -1,10 +1,10 @@
 import React from 'react';
-import Sidebar from './components/Dashboard';
+import Dashboard from './components/Dashboard';
 
 function App() {
   return (
     <div>
-      <Sidebar />
+      <Dashboard />
       {/* Your other components */}
     </div>
   );

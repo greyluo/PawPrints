@@ -17,7 +17,7 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from './ListItems';
+import { MainListItems, SecondaryListItems } from './ListItems';
 import {orange} from '@mui/material/colors';
 
 
@@ -83,9 +83,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme({
   palette: {
-    /*  orange */
+    /*  modern color */
     primary: {
-      main: orange[700],
+      main: orange[500],
     }
   },
 });
@@ -150,10 +150,10 @@ function DashboardContent() {
           <Divider />
           <List component="nav">
 
-            <mainListItems ></mainListItems>
+            <MainListItems ></MainListItems>
             <Divider sx={{ my: 1 }} />
-            <secondaryListItems open = {open}>
-            </secondaryListItems>
+            <SecondaryListItems open = {open}>
+            </SecondaryListItems>
           </List>
         </Drawer>
         <Box
