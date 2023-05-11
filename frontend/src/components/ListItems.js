@@ -9,30 +9,41 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import AddIcon from '@mui/icons-material/Add';
 import PetsIcon from '@mui/icons-material/Pets';
+import Link from '@mui/material/Link';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export function MainListItems() {
   return (
     <React.Fragment>
+    <Link href="/dashboard" underline="none" color="inherit">
       <ListItemButton>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
-      </ListItemButton>
 
+      </ListItemButton>
+      </Link>
+      <Link href="/profile" underline="none" color="inherit">
       <ListItemButton>
         <ListItemIcon>
           <PeopleIcon />
         </ListItemIcon>
-        <ListItemText primary="Your Profile" />
-      </ListItemButton>
 
+        <ListItemText primary="Your Profile" />
+
+      </ListItemButton>
+      </Link>
+      <Link href="/logout" underline="none" color="inherit">
       <ListItemButton>
         <ListItemIcon>
-          <AddIcon />
+          <LogoutIcon />
         </ListItemIcon>
-        <ListItemText primary="Add your Pet" />
+
+        <ListItemText primary="Logout" />
+
       </ListItemButton>
+      </Link>
     </React.Fragment>
   );
 }
@@ -52,6 +63,7 @@ export function SecondaryListItems({open}) {
         <ListItemIcon>
           <PetsIcon />
         </ListItemIcon>
+
         <ListItemText primary="Pet 2" />
       </ListItemButton>
       <ListItemButton>
@@ -60,6 +72,18 @@ export function SecondaryListItems({open}) {
         </ListItemIcon>
         <ListItemText primary="Pet 3" />
       </ListItemButton>
+      <Link href="/addPet" underline="none" color="inherit">
+      <ListItemButton>
+        <ListItemIcon>
+          <AddIcon />
+        </ListItemIcon>
+
+        <ListItemText primary="Add your Pet" />
+
+
+      </ListItemButton>
+      </Link>
     </React.Fragment>
+
   );
 }
