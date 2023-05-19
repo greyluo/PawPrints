@@ -1,42 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity ^0.8.0;
-
-contract insurance {
-    uint duration;
-
-    address public provider;
-    
-    constructor (){
-        provider = msg.sender; 
-    }
-
-    // 只有insurance provider 才有权限
-    modifier onlyProvider(){
-        require(
-            msg.sender == provider,
-            "only SELLER can call this."
-        );
-        _;
-    }
-
-    mapping(address => uint) insuranceRecord;
-
-    function updateStatus (uint _duration) 
-    public onlyProvider returns (address){
-        duration = _duration;
-        insuranceRecord[address(this)] = block.timestamp;
-        return address(this);
-    }
-
-    // 如果没有过期，通过require返回，并不花费gas
-    // 如故宫过期，修改duration
-    function checkExpired() external {
-        require(block.timestamp >= (insuranceRecord[address(this)] + duration), "Check passed, insurance NOT expired");
-
-        // If expired
-        insuranceRecord[address(this)] = 0;
-    }
-}
+import "./insurance.sol";
 
 contract PawPrints {
     
@@ -138,9 +102,12 @@ contract PawPrints {
         //这里是有bug的，需要把insurance.sol分到单独文件
         //正常的话insurance会抛出异常，需要借助
         
-        //require (insurance(insuranceAddress).checkExpired(), "Invalid Insurance");
-        state = State.insuranceVerified;
-        return true;
+        bool manualCheckPass = insurance(insuranceAddress).checkExpired();
+        if(manualCheckPass){
+            state = State.insuranceVerified;
+            return true;
+        }
+        return false;
     }
 
     function getMedicalRecord() public view returns (MedicalRecord memory) {

@@ -30,10 +30,11 @@ contract insurance {
 
     // 如果没有过期，通过require返回，并不花费gas
     // 如故宫过期，修改duration
-    function checkExpired() external {
+    function checkExpired() external returns(bool) {
         require(block.timestamp >= (insuranceRecord[address(this)] + duration), "Check passed, insurance NOT expired");
 
         // If expired
         insuranceRecord[address(this)] = 0;
+        return true;
     }
 }

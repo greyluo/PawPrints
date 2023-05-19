@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.20+commit.a1b79de6"
+		"version": "0.8.18+commit.87f61d96"
 	},
 	"language": "Solidity",
 	"output": {
@@ -13,7 +13,13 @@
 			{
 				"inputs": [],
 				"name": "checkExpired",
-				"outputs": [],
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -63,9 +69,9 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"backend/contracts/PawPrints.sol": "insurance"
+			"backend/contracts/insurance.sol": "insurance"
 		},
-		"evmVersion": "shanghai",
+		"evmVersion": "paris",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -77,12 +83,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"backend/contracts/PawPrints.sol": {
-			"keccak256": "0xe3848805801eec51c06c09bdb74a03037b77a43695d15479b481dace83b3f2d0",
+		"backend/contracts/insurance.sol": {
+			"keccak256": "0x6dea374dcc52ee1c081ae4ba5d243f1b4ec44fca883aa7044fd8eedc0ad23d0b",
 			"license": "GPL-3.0-or-later",
 			"urls": [
-				"bzz-raw://9448ea7aeecf9156a69a0e68cdfc0aa1dc25794256e8cdf6ada5432b1aef0d43",
-				"dweb:/ipfs/QmZfJtEuAYrffL7xUk4zTgagjxkV1pbwK1d8h9NgycSvpZ"
+				"bzz-raw://59b3cfd7783ace0351ee3b8fbc60f5c0b9de59f937a6ce7cda2ad83205e5e7c7",
+				"dweb:/ipfs/QmedzRQbuGodktcUvT4mx8HfKprazwd3A9uEzC2snfqiws"
 			]
 		}
 	},

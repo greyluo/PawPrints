@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.20+commit.a1b79de6"
+		"version": "0.8.18+commit.87f61d96"
 	},
 	"language": "Solidity",
 	"output": {
@@ -258,7 +258,7 @@
 		"compilationTarget": {
 			"backend/contracts/PawPrints.sol": "PawPrints"
 		},
-		"evmVersion": "shanghai",
+		"evmVersion": "paris",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -271,11 +271,19 @@
 	},
 	"sources": {
 		"backend/contracts/PawPrints.sol": {
-			"keccak256": "0xe3848805801eec51c06c09bdb74a03037b77a43695d15479b481dace83b3f2d0",
+			"keccak256": "0xdd31187761dd3ce535dc496097eeda5cb1c230255a1051981a6c323ef982eb6f",
 			"license": "GPL-3.0-or-later",
 			"urls": [
-				"bzz-raw://9448ea7aeecf9156a69a0e68cdfc0aa1dc25794256e8cdf6ada5432b1aef0d43",
-				"dweb:/ipfs/QmZfJtEuAYrffL7xUk4zTgagjxkV1pbwK1d8h9NgycSvpZ"
+				"bzz-raw://b772bb45694887abf4eb4765a6d0b328095fd5575cfebbadeb262f713b50bdb5",
+				"dweb:/ipfs/QmNZk2UxkxYMo8TbHb3Ay91vkbMJyyYvCX7zu6xxohSuQy"
+			]
+		},
+		"backend/contracts/insurance.sol": {
+			"keccak256": "0xeb8a4d1cb7b5e691c5ec90363fb74499aff06d7cf8bb94218781fd050c0bad96",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://bf5ddf6b9348f5d876ddcf142f669db9a6cd2fe02597064e26c0932f4c71f525",
+				"dweb:/ipfs/QmTTnmNvyDtFCpZLEdrBz1f896b2PGeCyLrFfnKbwMmw3R"
 			]
 		}
 	},
