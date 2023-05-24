@@ -63,7 +63,11 @@ contract PawPrints {
     }
     
     // Hospital creates new medical record
+<<<<<<< HEAD
     //入参还可以补充
+=======
+    // 入参还可以补充
+>>>>>>> b096d635bbb0a4ecd37eb136fd6b2e5928f90614
     function newMedicalRecord (uint _ownerId, uint _petId, uint _billAmount, uint _recordId, address ownerAddress) 
         public onlyHospital
     {

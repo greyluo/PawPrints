@@ -271,6 +271,7 @@
 	},
 	"sources": {
 		"backend/contracts/PawPrints.sol": {
+<<<<<<< HEAD
 			"keccak256": "0xdd31187761dd3ce535dc496097eeda5cb1c230255a1051981a6c323ef982eb6f",
 			"license": "GPL-3.0-or-later",
 			"urls": [
@@ -284,6 +285,20 @@
 			"urls": [
 				"bzz-raw://bf5ddf6b9348f5d876ddcf142f669db9a6cd2fe02597064e26c0932f4c71f525",
 				"dweb:/ipfs/QmTTnmNvyDtFCpZLEdrBz1f896b2PGeCyLrFfnKbwMmw3R"
+=======
+			"keccak256": "0xb14b52e91b158bac97db860fc543547542978c887ef86bee43464178a3fcb4d0",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://1a5310c68e1c12dd6d9157823c1c7cdc09265d54523474e1bad0a6bb048b7eb7",
+				"dweb:/ipfs/QmaQmxd4mwfamFLmsPahvY9T46tj5ApSJhDzgSGTmfcujF"
+			]
+		},
+		"backend/contracts/insurance.sol": {
+			"keccak256": "0x6d4f758aab9975b22d819a0c08ee93f467ca715c6a6f760f41f509349a8b4baa",
+			"urls": [
+				"bzz-raw://c673d657a734e4d364042fa290d3eb895c4b681927d7753c51fbb5ffc28491b7",
+				"dweb:/ipfs/QmXhja3XogGFvtsygMGgAHdK9sbiiyAapExmpqHGGkC4cA"
+>>>>>>> b096d635bbb0a4ecd37eb136fd6b2e5928f90614
 			]
 		}
 	},
