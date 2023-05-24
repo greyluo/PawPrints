@@ -49,6 +49,10 @@ To start the API server, run:
 
 You should be able to see "API is running on http://localhost:8080"
 
+### Backtend
+
+To start, we run on a blockchain integrated IDE, called Remix
+
 ## TroubleShooting
 
 If you run into issues with missing dependencies, the error messages should indicate which dependencies are missing. You can install them using npm:
