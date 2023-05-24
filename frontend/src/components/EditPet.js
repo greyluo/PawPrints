@@ -19,7 +19,7 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 
 //react function component
-function AddPet() {
+function EditPet() {
     const [age, setAge] = React.useState("");
 
     const labelStyle = {
@@ -41,12 +41,6 @@ function AddPet() {
         "world",
         "all"
       ];
-    const species = [
-        "dog",
-        "cat",
-        "bird",
-        "other",
-        ];
     const sex = [ "male", "female", "other"];
     const handleUpload = (event) => {
         const file = event.target.files[0];
@@ -69,20 +63,20 @@ function AddPet() {
             {/*  Add a title for the form */}
                 <Grid item sm={12} xs={12}>
                     <Box display="flex" justifyContent="center">
-                    <Typography variant="h4" component="h4" gutterBottom  fontWeight="bold">
-                        Add Your Pet
+                    <Typography variant="h4" component="h4" gutterBottom fontWeight="bold" >
+                        Edit
                     </Typography>
                 </Box>
                 </Grid>
 
-              <Grid item sm={12} md={4}>
+              <Grid item sm={12} md={2}>
                 <InputLabel
                   sx={labelStyle}
                 >
-                  What is your pet's name?
+                  Name
                 </InputLabel>
               </Grid>
-              <Grid item sm={12} md={8}>
+              <Grid item sm={12} md={10}>
                 <TextField
                   required
                   id="name"
@@ -94,54 +88,54 @@ function AddPet() {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item sm={12} md={4}>
+              <Grid item sm={12} md={2}>
                 <InputLabel
                   sx={labelStyle}
                 >
-                What Species?
+                  Species
                 </InputLabel>
               </Grid>
-              <Grid item sm={12} md={8}>
+              <Grid item sm={12} md={10}>
+                <TextField
+                  required
+                  id="species"
+                  name="species"
+                  label="species"
+                  fullWidth
+                  size="small"
+                  autoComplete="off"
+                  variant="outlined"
+                  inputProps={{ maxLength: 50 }}
+                />
+              </Grid>
+              <Grid item sm={12} md={2}>
+                <InputLabel
+                  sx={labelStyle}
+                >
+                  Breed
+                </InputLabel>
+              </Grid>
+              <Grid item sm={12} md={4}>
                   <Select
                     fullWidth
                     size="small"
-                    labelId="Species"
-                    label="Species"
-                    id="Species"
+                    labelId="demo-simple-select-label"
+                    label="Bread"
+                    id="demo-simple-select"
                   >
-                    {species.map((item) => (
+                    {categories.map((item) => (
                       <MenuItem value={item}>{item}</MenuItem>
                     ))}
                   </Select>
               </Grid>
-              <Grid item sm={12} md={4}>
+              <Grid item sm={12} md={2}>
                 <InputLabel
                   sx={labelStyle}
                 >
-                  What Breed?
+                  Sex
                 </InputLabel>
-              </Grid>
-              <Grid item sm={12} md={8}>
-                <TextField
-                    required
-                    id="breed"
-                    name="breed"
-                    label="breed"
-                    fullWidth
-                    size="small"
-                    autoComplete="off"
-                    variant="outlined"
-
-                    />
               </Grid>
               <Grid item sm={12} md={4}>
-                <InputLabel
-                  sx={labelStyle}
-                >
-                  Girls or Boys?
-                </InputLabel>
-              </Grid>
-              <Grid item sm={12} md={8}>
                 <Select
                     fullWidth
                     size="small"
@@ -153,11 +147,11 @@ function AddPet() {
                 ))}
                 </Select>
               </Grid>
-              <Grid item xs ={6}  sm={6} md={4}>
+              <Grid item xs ={6}  sm={6} md={2}>
                 <InputLabel
                   sx={labelStyle}
                 >
-                 Share image!
+                  Img Upload
                 </InputLabel>
               </Grid>
 
@@ -193,4 +187,4 @@ function AddPet() {
 
     }
 
-export default AddPet;
+export default EditPet;

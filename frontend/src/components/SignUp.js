@@ -10,8 +10,11 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
+
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import useToken from './useToken';
 
 function Copyright(props) {
   return (
@@ -27,14 +30,35 @@ function Copyright(props) {
 }
 
 
-export default function SignUp() {
-  const handleSubmit = (event) => {
+export default function SignUp({setToken}) {
+  let navigate = useNavigate();
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    const email = data.get('email');
+    const password = data.get('password');
+
+    const response = await fetch('http://localhost:8080/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
     });
+
+    if (response.ok) {
+      const { token } = await response.json();
+      console.log("Token: ", token);
+      setToken(token);
+      navigate("/dashboard");
+
+    } else {
+      console.log('Sign up failed');
+      alert("Sign up failed. The email address may already be in use.")
+    }
   };
 
   return (
@@ -115,7 +139,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/signin" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>

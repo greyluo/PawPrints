@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Dashboard from './components/Dashboard';
 import Profile from './components/Profile';
 import AddPet from './components/AddPet';
-
 import Box from '@mui/material/Box';
 import Bar from './components/Bar';
 import '@fontsource/roboto/300.css';
@@ -15,11 +14,12 @@ import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate} from "react-router-dom";
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
-import { useNavigate } from 'react-router-dom';
 import PetView from './components/PetView';
+import EditPet from './components/EditPet';
+import useToken from './components/useToken';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -43,27 +43,31 @@ const mdTheme = createTheme({
 
   },
 });
-
-function App() {
+function RedirectToSignIn() {
   const navigate = useNavigate();
-  const [state, setState] = useState(0);
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    setState(1);
-    navigate('/dashboard');
-  };
-  return (
+  React.useEffect(() => {
+    navigate('/signin');
+  }, [navigate]);
 
+  return null;
+}
+function App() {
+  const { token, setToken } = useToken();
+  if (!token) {
+    return (
+      <Routes>
+      <Route path="/signin" element={<SignIn setToken={setToken} />} />
+      <Route path="/signup" element={<SignUp setToken={setToken} />} />
+      <Route path="*" element={<RedirectToSignIn />} />
+    </Routes>
+    );
+  }
+  return (
     <React.Fragment>
        <CssBaseline />
       <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
-        {<Bar />}
+        {<Bar setToken={setToken} />}
         <Box
           component="main"
           sx={{
@@ -79,13 +83,13 @@ function App() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Routes>
-              <Route path="/" element={<SignIn handleSubmit = {handleSubmit}  />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/addPet" element={<AddPet />} />
-              <Route path="/signin" element={<SignIn handleSubmit = {handleSubmit} />} />
               <Route path= "/signup" element={<SignUp />} />
               <Route path="/petview" element={<PetView />} />
+              <Route path="/editpet" element={<EditPet />} />
+              <Route path="/signup" element={<SignUp />} />
 
             </Routes>
             <Copyright sx={{ pt: 4 }} />

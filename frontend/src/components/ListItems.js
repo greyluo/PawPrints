@@ -12,7 +12,10 @@ import PetsIcon from '@mui/icons-material/Pets';
 import Link from '@mui/material/Link';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-export function MainListItems() {
+export function MainListItems({setToken}) {
+  const handleLogout = () => {
+    setToken(0);
+  };
   return (
     <React.Fragment>
     <Link href="/dashboard" underline="none" color="inherit">
@@ -34,7 +37,7 @@ export function MainListItems() {
 
       </ListItemButton>
       </Link>
-      <Link href="/logout" underline="none" color="inherit">
+      <Link href="/" underline="none" color="inherit" onClick={handleLogout}>
       <ListItemButton>
         <ListItemIcon>
           <LogoutIcon />
@@ -53,17 +56,19 @@ export function SecondaryListItems({open}) {
     <React.Fragment>
       {open && <ListSubheader component="div">Your Pets</ListSubheader>}
       {/* Create pet with random name */}
-      <ListItemButton>
-        <ListItemIcon>
-          <PetsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Pet 1" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon>
-          <PetsIcon />
-        </ListItemIcon>
+      <Link href="/petview" underline="none" color="inherit">
+        <ListItemButton>
+          <ListItemIcon>
+            <PetsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Pet 1" />
+        </ListItemButton>
+      </Link>
 
+      <ListItemButton>
+        <ListItemIcon>
+          <PetsIcon />
+        </ListItemIcon>
         <ListItemText primary="Pet 2" />
       </ListItemButton>
       <ListItemButton>

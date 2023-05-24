@@ -12,13 +12,15 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        PawPrints
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -27,10 +29,30 @@ function Copyright(props) {
   );
 }
 
+async function loginUser(credentials) {
+  return fetch('http://localhost:8080/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+    .then(data => data.json())
+ }
 
-const  SignIn = ( {handleSubmit}) =>{
-
-
+const  SignIn = ( {setToken}) =>{
+  let navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const token = await loginUser({
+      email,
+      password
+    });
+    setToken(token);
+    navigate("/dashboard");
+  }
   return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -57,7 +79,9 @@ const  SignIn = ( {handleSubmit}) =>{
               label="Email Address"
               name="email"
               autoComplete="email"
+              value={email}
               autoFocus
+              onChange={e => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -67,7 +91,9 @@ const  SignIn = ( {handleSubmit}) =>{
               label="Password"
               type="password"
               id="password"
+              value={password}
               autoComplete="current-password"
+              onChange={e => setPassword(e.target.value)}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
