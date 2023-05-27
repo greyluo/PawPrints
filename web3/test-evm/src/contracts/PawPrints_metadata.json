@@ -1,0 +1,286 @@
+{
+	"compiler": {
+		"version": "0.8.18+commit.87f61d96"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [],
+				"name": "reimbursed",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [],
+				"name": "sent",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [],
+				"name": "verified",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [],
+				"name": "visited",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "getMedicalRecord",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "ownerId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "petId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "billAmount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "recordId",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct PawPrints.MedicalRecord",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "hospital",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "insuranceProvider",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_ownerId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_petId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_billAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_recordId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "ownerAddress",
+						"type": "address"
+					}
+				],
+				"name": "newMedicalRecord",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "record",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "ownerId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "petId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "billAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "recordId",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "reimbursement",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "insuranceAddress",
+						"type": "address"
+					}
+				],
+				"name": "setInsurance",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "state",
+				"outputs": [
+					{
+						"internalType": "enum PawPrints.State",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "insuranceAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "validHospital",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "overR",
+						"type": "bool"
+					}
+				],
+				"name": "verify",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"backend/contracts/PawPrints.sol": "PawPrints"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"backend/contracts/PawPrints.sol": {
+			"keccak256": "0x3654b28558d43cc145b6d95e2eec551863a3e66ec38c92dc728191a0dfeea490",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://19885fc698aa97a02d7c99601eb6b3873e0f1d2bcb56f71f64553a63917d8d57",
+				"dweb:/ipfs/QmVoYrh42S89rPLcyvmdAXuezQuuh416NwSjKEkXUYvkVU"
+			]
+		},
+		"backend/contracts/insurance.sol": {
+			"keccak256": "0xde9e37967c61bcced79571b64be247cdc65a890c790ac126282873efabe38e7b",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://ef6566f904c60893efa644daac85312ede45f0d6711550cea1f118d4f22a307a",
+				"dweb:/ipfs/QmUDPaK4CyPWD2A8zck9NdcigebDGn5Y7J6gRyuTGLMJBG"
+			]
+		}
+	},
+	"version": 1
+}
