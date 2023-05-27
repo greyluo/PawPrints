@@ -15,7 +15,7 @@ const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: process.env.DB_PASSWORD,
-  database: 'users'
+  database: 'pawprints'
 });
 
 app.post('/login', async (req, res) => {
@@ -59,11 +59,11 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/signup', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, firstName, lastName, userType, phoneNumber }  = req.body;
 
   // validate if email and password are provided
-  if (!email || !password) {
-    return res.status(400).send({ error: 'Email and Password are required.' });
+  if (!email || !password|| !firstName || !lastName || !userType || !phoneNumber) {
+    return res.status(400).send({ error: 'Miss Fields' });
   }
 
   try {
@@ -82,8 +82,9 @@ app.post('/signup', async (req, res) => {
 
     // insert new user into the database
     const [result] = await pool.execute(
-      'INSERT INTO users (email, password) VALUES (?, ?)',
-      [email, hashedPassword]
+      'INSERT INTO users (username, email, password, first_name,last_name,type, phone_number) VALUES (?, ?, ?, ?, ?, ?,?)',
+      ["",email, hashedPassword, firstName, lastName, userType, phoneNumber]
+
     );
 
     // create token payload

@@ -11,10 +11,14 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
-
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useToken from './useToken';
+import { FormControl, InputLabel } from '@mui/material';
+
+
 
 function Copyright(props) {
   return (
@@ -37,6 +41,11 @@ export default function SignUp({setToken}) {
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
+    const firstName = data.get('firstName');
+    const lastName = data.get('lastName');
+    const userType = data.get('userType');
+    const phoneNumber = data.get('phoneNumber');
+
 
     const response = await fetch('http://localhost:8080/signup', {
       method: 'POST',
@@ -46,6 +55,10 @@ export default function SignUp({setToken}) {
       body: JSON.stringify({
         email: email,
         password: password,
+        firstName: firstName,
+        lastName: lastName,
+        userType: userType,
+        phoneNumber: phoneNumber
       }),
     });
 
@@ -78,7 +91,7 @@ export default function SignUp({setToken}) {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" Validate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -100,6 +113,41 @@ export default function SignUp({setToken}) {
                   name="lastName"
                   autoComplete="family-name"
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel id="userType-label">User Type</InputLabel>
+                  <Select
+                    labelId="userType-label"
+                    id="userType"
+                    name="userType"
+                    defaultValue=""
+                    required
+                  >
+                    <MenuItem value="pet owner">Pet Owner</MenuItem>
+                    <MenuItem value="hospital">Hospital</MenuItem>
+                    <MenuItem value="other">Other</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+
+
+                <TextField
+                  required
+                  fullWidth
+                  id="phoneNumber"
+                  label="Phone Number"
+                  name="phoneNumber"
+                  type="tel"
+                  autoComplete="tel"
+                  inputProps={{
+                    maxLength: 12,
+                    pattern: "[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                  }}
+                  helperText="Format: 123-456-7890"
+                />
+
               </Grid>
               <Grid item xs={12}>
                 <TextField

@@ -50,6 +50,12 @@ const  SignIn = ( {setToken}) =>{
       email,
       password
     });
+    console.log(token);
+    //check if token is int or string
+    if (!token || token.error){
+      alert("Invalid email or password");
+      return;
+    }
     setToken(token);
     navigate("/dashboard");
   }
