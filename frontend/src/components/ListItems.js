@@ -15,7 +15,7 @@ import { useState, useEffect } from 'react';
 
 export function MainListItems({setToken}) {
   const handleLogout = () => {
-    setToken(0);
+    setToken({token:null});
   };
   return (
     <React.Fragment>

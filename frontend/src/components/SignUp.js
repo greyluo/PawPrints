@@ -63,9 +63,6 @@ export default function SignUp({setToken}) {
     });
 
     if (response.ok) {
-      const { token } = await response.json();
-      console.log("Token: ", token);
-      setToken(token);
       navigate("/dashboard");
 
     } else {

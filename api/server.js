@@ -39,6 +39,7 @@ app.post('/login', async (req, res) => {
 
     // Compare the hashed password in DB with the password provided by user
     const match = await bcrypt.compare(password, rows[0].password);
+    const role = rows[0].type;
 
     if (!match) {
       return res.status(401).send({ error: 'Invalid email or password' });
@@ -50,7 +51,7 @@ app.post('/login', async (req, res) => {
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    res.send({ token });
+    res.send({ token,role });
 
   } catch (error) {
     console.log(error);

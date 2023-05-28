@@ -40,23 +40,24 @@ async function loginUser(credentials) {
     .then(data => data.json())
  }
 
-const  SignIn = ( {setToken}) =>{
+const  SignIn = ( {setToken,setRole}) =>{
   let navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = async e => {
     e.preventDefault();
-    const token = await loginUser({
+    const data = await loginUser({
       email,
       password
     });
-    console.log(token);
+    console.log(data.token);
     //check if token is int or string
-    if (!token || token.error){
+    if (!data.token || data.token.error){
       alert("Invalid email or password");
       return;
     }
-    setToken(token);
+    setToken(data);
+    setRole(data);
     navigate("/dashboard");
   }
   return (

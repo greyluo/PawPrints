@@ -20,6 +20,7 @@ import SignUp from './components/SignUp';
 import PetView from './components/PetView';
 import EditPet from './components/EditPet';
 import useToken from './components/useToken';
+import useRole from './components/useRole';
 
 function Copyright(props) {
   return (
@@ -54,21 +55,23 @@ function RedirectToSignIn() {
 }
 function App() {
   const { token, setToken } = useToken();
+  const { role, setRole } = useRole();
   if (!token) {
     return (
       <Routes>
-      <Route path="/signin" element={<SignIn setToken={setToken} />} />
-      <Route path="/signup" element={<SignUp setToken={setToken} />} />
-      <Route path="*" element={<RedirectToSignIn />} />
+      <Route path="/signin" element={<SignIn setToken={setToken} setRole = {setRole}/>} />
+      <Route path="/signup" element={<SignUp setToken={setToken} setRole = {setRole} />} />
+      <Route path="*" element={<RedirectToSignIn/>} />
     </Routes>
     );
   }
+  console.log(role);
   return (
     <React.Fragment>
        <CssBaseline />
       <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
-        {<Bar setToken={setToken} />}
+        {role ==="pet owner"&&<Bar setToken={setToken} />}
         <Box
           component="main"
           sx={{
