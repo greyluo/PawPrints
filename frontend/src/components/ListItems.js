@@ -11,6 +11,7 @@ import AddIcon from '@mui/icons-material/Add';
 import PetsIcon from '@mui/icons-material/Pets';
 import Link from '@mui/material/Link';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useState, useEffect } from 'react';
 
 export function MainListItems({setToken}) {
   const handleLogout = () => {
@@ -51,44 +52,41 @@ export function MainListItems({setToken}) {
   );
 }
 
-export function SecondaryListItems({open}) {
+export function SecondaryListItems({ open }) {
+  const [pets, setPets] = useState([]);
+
+  useEffect(() => {
+    // Fetch the list of pets from the server using a GET request
+    fetch('http://localhost:8080/getpets') // Replace '/getpets' with your actual endpoint to fetch the list of pets
+      .then(response => response.json())
+      .then(data => setPets(data))
+      .catch(error => console.error(error));
+  }, []);
+  console.log(pets)
+
   return (
     <React.Fragment>
       {open && <ListSubheader component="div">Your Pets</ListSubheader>}
-      {/* Create pet with random name */}
-      <Link href="/petview" underline="none" color="inherit">
+
+      {pets[0]!=undefined && pets[0].map(pet => (
+        <Link key={pet.id} href={`/petview/${pet.id}`} underline="none" color="inherit">
+          <ListItemButton>
+            <ListItemIcon>
+              <PetsIcon />
+            </ListItemIcon>
+            <ListItemText primary={pet.name} />
+          </ListItemButton>
+        </Link>
+      ))}
+
+      <Link href="/addPet" underline="none" color="inherit">
         <ListItemButton>
           <ListItemIcon>
-            <PetsIcon />
+            <AddIcon />
           </ListItemIcon>
-          <ListItemText primary="Pet 1" />
+          <ListItemText primary="Add your Pet" />
         </ListItemButton>
       </Link>
-
-      <ListItemButton>
-        <ListItemIcon>
-          <PetsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Pet 2" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon>
-          <PetsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Pet 3" />
-      </ListItemButton>
-      <Link href="/addPet" underline="none" color="inherit">
-      <ListItemButton>
-        <ListItemIcon>
-          <AddIcon />
-        </ListItemIcon>
-
-        <ListItemText primary="Add your Pet" />
-
-
-      </ListItemButton>
-      </Link>
     </React.Fragment>
-
   );
 }

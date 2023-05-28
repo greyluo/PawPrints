@@ -20,6 +20,7 @@ import SignUp from './components/SignUp';
 import PetView from './components/PetView';
 import EditPet from './components/EditPet';
 import useToken from './components/useToken';
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -87,7 +88,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/addPet" element={<AddPet />} />
               <Route path= "/signup" element={<SignUp />} />
-              <Route path="/petview" element={<PetView />} />
+              <Route path="/petview/:id" element={<PetView />} />
               <Route path="/editpet" element={<EditPet />} />
               <Route path="/signup" element={<SignUp />} />
 

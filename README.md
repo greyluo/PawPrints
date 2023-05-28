@@ -7,6 +7,7 @@ PawPrints is a blockchain-powered platform for pet medical data tracking and sha
 Before you begin, ensure you have met the following requirements:
 
 You have a recent version of Node.js and npm installed.
+You also need to have MySQL server installed.
 
 ## Installation
 

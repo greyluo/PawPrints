@@ -16,11 +16,62 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { useNavigate } from 'react-router-dom';
 
 
 //react function component
 function AddPet() {
-    const [age, setAge] = React.useState("");
+  const navigate = useNavigate();
+  const [name, setName] = React.useState("");
+  const [species, setSpecies] = React.useState("");
+  const [color, setColor] = React.useState([]);
+  const [breed, setBreed] = React.useState("");
+  const [gender, setGender] = React.useState("");
+  const [birthday, setBirthday] = React.useState(null);
+  const [isNeutered, setIsNeutered] = React.useState(false);
+  const [insuranceProvider, setInsuranceProvider] = React.useState("");
+  const [weight, setWeight] = React.useState("");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const colors = color.join(',');
+    const pet = {
+      name,
+      species,
+      colors,
+      breed,
+      gender,
+      birthday,
+      isNeutered,
+      weight,
+      insuranceProvider,
+      ownerId: 1, // Temporarily hardcoded, update this with the actual owner's id
+    };
+
+    try {
+      const response = await fetch('http://localhost:8080/addpet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(pet)
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else {
+        const data = await response.json();
+        const petId = data.results[0].insertId; // Adjust this based on your actual response structure
+        // Navigate to the PetView page with the pet ID
+        navigate(`/petview/${petId}`);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+
 
     const labelStyle = {
         display: "flex",
@@ -28,9 +79,14 @@ function AddPet() {
         fontWeight: 700
       }
 
-    const handleChange = (event) => {
-      setAge(event.target.value);
+
+      const handleColorChange = (event) => {
+        const selectedColors = event.target.value;
+        if (selectedColors.length <= 3) {
+          setColor(selectedColors);
+        }
     };
+
     const categories = [
         "science",
         "sports",
@@ -41,13 +97,26 @@ function AddPet() {
         "world",
         "all"
       ];
-    const species = [
+    const speciesType = [
         "dog",
         "cat",
-        "bird",
-        "other",
         ];
-    const sex = [ "male", "female", "other"];
+    const colorType = [
+        "black",
+        "white",
+        "brown",
+        "grey",
+        "yellow",
+        "orange",
+        "red",
+        "blue",
+        "green",
+        "purple",
+        "pink",
+        "other"
+    ];
+
+
     const handleUpload = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -63,11 +132,11 @@ function AddPet() {
         <React.Fragment>
         <Paper elevation={3}>
 
-          <Box component="form" sx={{ padding: 5 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ padding: 5 }}>
 
             <Grid container spacing={3} >
             {/*  Add a title for the form */}
-                <Grid item sm={12} xs={12}>
+                <Grid item  xs={12}>
                     <Box display="flex" justifyContent="center">
                     <Typography variant="h4" component="h4" gutterBottom  fontWeight="bold">
                         Add Your Pet
@@ -75,14 +144,14 @@ function AddPet() {
                 </Box>
                 </Grid>
 
-              <Grid item sm={12} md={4}>
+              <Grid item  md={4}>
                 <InputLabel
                   sx={labelStyle}
                 >
-                  What is your pet's name?
+                  Name
                 </InputLabel>
               </Grid>
-              <Grid item sm={12} md={8}>
+              <Grid item  md={8}>
                 <TextField
                   required
                   id="name"
@@ -92,13 +161,15 @@ function AddPet() {
                   size="small"
                   autoComplete="off"
                   variant="outlined"
+                  onChange={e => setName(e.target.value)}
+                  value = {name}
                 />
               </Grid>
               <Grid item sm={12} md={4}>
                 <InputLabel
                   sx={labelStyle}
                 >
-                What Species?
+                Species
                 </InputLabel>
               </Grid>
               <Grid item sm={12} md={8}>
@@ -108,8 +179,12 @@ function AddPet() {
                     labelId="Species"
                     label="Species"
                     id="Species"
+                    name='species'
+                    onChange={e => setSpecies(e.target.value)}
+                    value = {species}
+
                   >
-                    {species.map((item) => (
+                    {speciesType.map((item) => (
                       <MenuItem value={item}>{item}</MenuItem>
                     ))}
                   </Select>
@@ -118,10 +193,63 @@ function AddPet() {
                 <InputLabel
                   sx={labelStyle}
                 >
-                  What Breed?
+                Color
                 </InputLabel>
               </Grid>
               <Grid item sm={12} md={8}>
+
+                  <Select
+                    multiple
+                    fullWidth
+                    size="small"
+                    labelId="Color"
+                    label="Color"
+                    id="color"
+                    name="color"
+                    onChange={handleColorChange}
+                    value = {color}
+                    renderValue={(selected) => selected.join(', ')}
+                  >
+                    {colorType.map((item) => (
+                      <MenuItem key={item} value={item}>
+                        <Checkbox defaultChecked checked={color.indexOf(item) > -1} />
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>Pick max 3</FormHelperText>
+              </Grid>
+              <Grid item sm={12} md={4}>
+                <InputLabel sx={labelStyle}>
+                  Weight
+                </InputLabel>
+              </Grid>
+              <Grid item sm={12} md={8}>
+                <TextField
+                  required
+                  id="weight"
+                  name="weight"
+                  label="weight"
+                  fullWidth
+                  size="small"
+                  autoComplete="off"
+                  placeholder="Enter weight in pounds"
+                  variant="outlined"
+                  inputProps={{ inputMode: 'numeric', pattern: "[0-9]*"}}
+                  onChange={e => setWeight(!isNaN(parseInt(e.target.value)) ? parseInt(e.target.value) : "")}
+ // Parse the value to an integer, if parsing fails it will be set to ""
+                  value={weight}
+                />
+              </Grid>
+
+              <Grid item  md={4}>
+                <InputLabel
+                  sx={labelStyle}
+                >
+                  Breed
+                </InputLabel>
+              </Grid>
+              <Grid item  md={8}>
                 <TextField
                     required
                     id="breed"
@@ -131,35 +259,89 @@ function AddPet() {
                     size="small"
                     autoComplete="off"
                     variant="outlined"
-
+                    onChange={e => setBreed(e.target.value)}
+                    value = {breed}
                     />
               </Grid>
               <Grid item sm={12} md={4}>
+                <InputLabel sx={labelStyle}>Birthday</InputLabel>
+              </Grid>
+              <Grid item sm={12} md={8}>
+                <TextField
+                  id="birthday"
+                  type="date"
+                  name="birthday"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  onChange={e => setBirthday(e.target.value)}
+                  value = {birthday}
+                />
+              </Grid>
+              <Grid item sm={12} md={4}>
+                <InputLabel sx={labelStyle}>Is Neutered</InputLabel>
+              </Grid>
+              <Grid item sm={12} md={8}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      defaultChecked
+                      id="isNeutered"
+                      name="isNeutered"
+                      color="primary"
+                      onChange={e => setIsNeutered(e.target.checked)}
+                      checked={isNeutered}
+                    />
+                  }
+                />
+              </Grid>
+
+
+              <Grid item  md={4}>
                 <InputLabel
                   sx={labelStyle}
                 >
-                  Girls or Boys?
+                  Gender
                 </InputLabel>
               </Grid>
-              <Grid item sm={12} md={8}>
+              <Grid item  md={8}>
                 <Select
                     fullWidth
                     size="small"
-                    labelId="sex"
-                    label="Sex"
+                    labelId="Gender"
+                    label="gender"
+                    name='gender'
+                    onChange={e => setGender(e.target.value)}
+                    value={gender}
                 >
-                {sex.map((item) => (
-                    <MenuItem value={item}>{item}</MenuItem>
-                ))}
+                  <MenuItem value='M'>Male</MenuItem>
+                  <MenuItem value='F'>Female</MenuItem>
                 </Select>
               </Grid>
+              <Grid item sm={12} md={4}>
+                  <InputLabel sx={labelStyle}>Insurance Provider</InputLabel>
+                </Grid>
+                <Grid item sm={12} md={8}>
+                  <TextField
+                    id="insuranceProvider"
+                    name="insuranceProvider"
+                    fullWidth
+                    size="small"
+                    autoComplete="off"
+                    variant="outlined"
+                    onChange={e => setInsuranceProvider(e.target.value)}
+                    value = {insuranceProvider}
+                  />
+              </Grid>
+
               <Grid item xs ={6}  sm={6} md={4}>
                 <InputLabel
                   sx={labelStyle}
                 >
-                 Share image!
+                 Image
                 </InputLabel>
               </Grid>
+
 
               <Grid item xs={6}sm={6} md={3} style={{ display: 'flex', justifyContent: 'flex-start' }}>
             <label htmlFor="upload-image">
@@ -177,7 +359,7 @@ function AddPet() {
 
             </label>
             </Grid>
-            <Grid item sm={12} >
+            <Grid item  >
             <Box display="flex" justifyContent="center">
                 <Button type="submit" variant="contained">
                     Submit
