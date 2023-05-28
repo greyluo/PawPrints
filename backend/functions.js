@@ -41,32 +41,19 @@ async function CreateAccount(){
 // parameters ownerId, petId, billAmount, recordId, ownerAddress
 async function CreateMedicalRecord(contractAddress, accountAddress, privateKey) {
     console.log("0");
-    web3.eth.accounts.wallet.add(privateKey);
+    //web3.eth.accounts.wallet.add(privateKey);
     var PawPrints = new web3.eth.Contract(abi, contractAddress);
-    try {
-    const receipt = await PawPrints.methods.newMedicalRecord(100, 101, 102, 103, '0x8e678e6E5Af6169de14E9bF145415Be95099f512').send({ from: accountAddress, gasLimit:500000});
-    console.log('Transaction receipt:', receipt);
-    } catch (error) {
-    console.error('Error sending transaction:', error);
+    const encoded = PawPrints.methods.newMedicalRecord(100, 101, 102, 103, '0x8e678e6E5Af6169de14E9bF145415Be95099f512').encodeABI();
+    var tx = {
+      from: accountAddress,
+      to: contractAddress,
+      gas: 100000,
+      data: encoded
     }
 
-   /*  console.log("1");
-    var rawTx = {
-        nonce: '0x00',
-        gasPrice: '0x09184e72a000',
-        gasLimit: '0x2710',
-        from: accountAddress,
-        value: '0x00',
-        chainId: 80001,
-        data: PawPrints.methods.newMedicalRecord(100, 101, 102, 103, '0x8e678e6E5Af6169de14E9bF145415Be95099f512').encodeABI(),
-      }
-    console.log("2");
-    var tx = new Tx(rawTx, {'chain':'mumbai'});
-    const privateKeyBuffer = Buffer.from(privateKey, 'hex');
-    var signedTx = tx.sign(privateKeyBuffer);
-    var stx = signedTx.serialize();
-    console.log("4");
-    web3.eth.sendSignedTransaction('0x' + stx.toString('hex')).on('receipt', console.log); */
+    web3.eth.accounts.signTransaction(tx, privateKey).then(signed => {
+      web3.eth.sendSignedTransaction(signed.rawTransaction);
+    })
 }
 
 
