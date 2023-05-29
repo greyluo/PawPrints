@@ -81,7 +81,7 @@ export function SecondaryListItems({ setToken, open, token, role }) {
 
   return (
     <React.Fragment>
-      {open && <ListSubheader component="div">Your Pets</ListSubheader>}
+      {open&&role==="pet owner" && <ListSubheader component="div">Your Pets</ListSubheader>}
 
       {pets[0]!==undefined && pets[0].map(pet => (
         <Link key={pet.id} href={`/petview/${pet.id}`} underline="none" color="inherit">
@@ -94,14 +94,23 @@ export function SecondaryListItems({ setToken, open, token, role }) {
         </Link>
       ))}
 
-      <Link href="/addPet" underline="none" color="inherit">
+      {role==="pet owner" &&<Link href="/addPet" underline="none" color="inherit">
         <ListItemButton>
           <ListItemIcon>
             <AddIcon />
           </ListItemIcon>
-          <ListItemText primary="Add your Pet" />
+          <ListItemText primary="Add a Pet" />
         </ListItemButton>
-      </Link>
+      </Link>}
+      {role==="hospital" &&<Link href="/linkPet" underline="none" color="inherit">
+        <ListItemButton>
+          <ListItemIcon>
+            <AddIcon />
+          </ListItemIcon>
+          <ListItemText primary="Link a Pet" />
+        </ListItemButton>
+      </Link>}
+
     </React.Fragment>
   );
 }

@@ -38,7 +38,7 @@ const Profile = ({token, role,setToken}) => {
           sx={{
             p: 4,
             bgcolor: 'background.default',
-            minHeight: '100vh',
+            minHeight: '100vh'
           }}
         >
           {user !== null && (
