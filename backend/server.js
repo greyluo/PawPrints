@@ -161,7 +161,7 @@ app.get('/getuser',authenticateUser, async (req, res) => {
       // No pet found with the provided ID
       res.status(404).json({ error: 'Pet not found' });
       return;
-    } 
+    }
     const petData = results[0]; // Assuming only one pet is returned with the provided ID
 
     res.json(petData);
@@ -196,6 +196,28 @@ app.get('/getpet', async (req, res) => {
   }
 });
 
+app.get('/getpetbyhospital',authenticateUser, async (req, res) => {
+  const hospitalId = req.id;
+  try {
+    const query = 'SELECT * FROM pets WHERE hospital_id = ?'; // Replace 'id' with the appropriate column name for pet identification
+    const results = await pool.query(query, [hospitalId]);
+    const query2 = 'SELECT first_name, last_name FROM users WHERE id = ?'; // Replace 'id' with the appropriate column name for pet identification
+    //for each pet, get the owner name, use map or foreach
+    for (let i = 0; i < results[0].length; i++) {
+      const ownerId = results[0][i].owner_id;
+      const names = await pool.query(query2, [ownerId]);
+      results[0][i].owner_name = names[0][0].first_name + " " + names[0][0].last_name;
+    }
+    res.json(results[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+
+
+
+});
+
 app.get('/getpets',authenticateUser, async (req, res) => {
   try {
     // Assuming you have a pets table in your database
@@ -206,7 +228,7 @@ app.get('/getpets',authenticateUser, async (req, res) => {
     // Execute the query
     const results = await pool.query(query,[userId]);
 
-    res.json(results);
+    res.json(results[0]);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal server error' });
@@ -238,6 +260,44 @@ app.post('/verify-pet', (req, res) => {
       res.sendStatus(401); // Send a 401 Unauthorized response
   }
 });
+
+app.get('/getPetToken/:petId', (req, res) => {
+  const petId = req.params.petId;
+
+  const token = jwt.sign({ petId }, process.env.JWT_SECRET, { expiresIn: '30m' });
+
+  res.json({ token });
+});
+
+app.put('/verifyPetToken',authenticateUser,(req, res) => {
+  const { petToken, name } = req.body;
+  const id = req.id;
+
+  // Verify and decode the token
+  let decoded;
+  try {
+      decoded = jwt.verify(petToken, process.env.JWT_SECRET);
+  } catch (e) {
+      return res.status(401).json({ error: 'Invalid token' });
+  }
+
+
+  const { petId } = decoded;
+  const sql = `UPDATE pets SET staff_name = ?, hospital_id = ? WHERE id = ?`;
+  pool.query(sql, [name, id, petId], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: err });
+    } else {
+      res.status(200).json({ message: 'Record updated successfully.' });
+    }
+  });
+
+  // Do something with the petId and name...
+
+  res.status(200).json({ petId });
+});
+
 
 
 app.listen(8080, () => console.log('API is running on http://localhost:8080'));
