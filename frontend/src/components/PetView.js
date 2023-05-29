@@ -7,12 +7,45 @@ import PetsIcon from '@mui/icons-material/Pets';
 import GenderMaleIcon from '@mui/icons-material/Male';
 import CategoryIcon from '@mui/icons-material/Category';
 import { useParams } from 'react-router-dom';
+import {Snackbar, Alert } from '@mui/material';
 import GenderFemaleIcon from '@mui/icons-material/Female';
 
-const PetView = () => {
+const PetView = ({role,token}) => {
   const [petData, setPetData] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
   const { id } = useParams();
+  const handleClick = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/getPetToken', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
 
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        navigator.clipboard.writeText(data.token);
+        setShowAlert(true);
+        console.log('Data:', data);
+      } else {
+        // Handle errors
+        console.error(data);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setShowAlert(false);
+  };
   useEffect(() => {
     // Fetch the pet data from the server using a GET request with the 'id' parameter
     fetch(`http://localhost:8080/getpet?id=${id}`)
@@ -71,10 +104,15 @@ const PetView = () => {
                 </Box>
               </CardContent>
               <CardActions sx={{ mt: 'auto', justifyContent: 'flex-end' }}>
-                <Button size="small" variant="">Share</Button>
+                <Button size="small" variant="" onClick={handleClick}>Share</Button>
                 <Link to="/editpet">
                   <Button size="small" variant="">Edit</Button>
                 </Link>
+                <Snackbar open={showAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+                <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
+                  Token copied to clipboard!
+                </Alert>
+              </Snackbar>
               </CardActions>
             </Box>
           </Card>

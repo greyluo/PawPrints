@@ -19,7 +19,7 @@ function LinkPet() {
     event.preventDefault();
     // API request logic here
     try {
-      const response = await fetch('/', {
+      const response = await fetch('http://localhost:8080/verifyPetToken', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
