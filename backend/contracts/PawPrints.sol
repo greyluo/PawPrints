@@ -96,8 +96,9 @@ contract PawPrints {
         external onlyInsuranceProvider inState(State.insuranceProvided) returns(bool)
     {
         emit verified();
-
+        // hospital 手动验证 insurance 自动验证
         if (overR){
+            state = State.insuranceVerified;
             return true;
         }    
         
@@ -111,6 +112,10 @@ contract PawPrints {
         }
         return false;
     }
+
+    function getState() public view returns (State) {
+        return state;
+    } 
 
     function getMedicalRecord() public view returns (MedicalRecord memory) {
         MedicalRecord memory user = record[1];
