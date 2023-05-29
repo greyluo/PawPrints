@@ -90,7 +90,7 @@ function App() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Routes>
-              <Route path="/dashboard" element={<Dashboard role={role}/>} />
+              <Route path="/dashboard" element={<Dashboard role={role} token={token} setToken={setToken}/>} />
               <Route path="/profile" element={<Profile setToken={setToken} token= {token} role={role} />} />
               {role==="pet owner" && <Route path="/addPet" element={<AddPet token = {token} />} />}
               <Route path= "/signup" element={<SignUp />} />

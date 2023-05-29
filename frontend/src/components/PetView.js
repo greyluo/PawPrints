@@ -16,7 +16,7 @@ const PetView = ({role,token}) => {
   const { id } = useParams();
   const handleClick = async () => {
     try {
-      const response = await fetch('http://localhost:8080/getPetToken', {
+      const response = await fetch(`http://localhost:8080/getPetToken/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ const PetView = ({role,token}) => {
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <GenderMaleIcon /> {/* Replace with GenderFemaleIcon for female pets */}
                     <Typography variant="body2" color="text.secondary">
-                      Gender: {gender}
+                      Sex: {gender}
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -103,7 +103,7 @@ const PetView = ({role,token}) => {
                   </Box>
                 </Box>
               </CardContent>
-              <CardActions sx={{ mt: 'auto', justifyContent: 'flex-end' }}>
+              {token==="pet owner"&&<CardActions sx={{ mt: 'auto', justifyContent: 'flex-end' }}>
                 <Button size="small" variant="" onClick={handleClick}>Share</Button>
                 <Link to="/editpet">
                   <Button size="small" variant="">Edit</Button>
@@ -113,7 +113,7 @@ const PetView = ({role,token}) => {
                   Token copied to clipboard!
                 </Alert>
               </Snackbar>
-              </CardActions>
+              </CardActions>}
             </Box>
           </Card>
         </Grid>

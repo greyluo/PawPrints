@@ -3,10 +3,10 @@ import { Container, Grid, Paper } from '@mui/material';
 import Box from '@mui/material/Box';
 import PetTable from './PetTable';
 
-const Dashboard = (role) => {
+const Dashboard = ({role, token,setToken}) => {
     return (
         <div>
-             <Grid container spacing={3}>
+             {role==="hospital"&&<Grid container spacing={3}>
               {/* <Grid item xs={12} md={8} lg={9}>
                 <Paper
                   sx={{
@@ -30,13 +30,9 @@ const Dashboard = (role) => {
                 </Paper>
               </Grid> */}
               <Grid item xs={12}>
-
-                  <PetTable />
-
-
-
+                  <PetTable token={token}/>
               </Grid>
-            </Grid>
+            </Grid>}
 
 
         </div>
