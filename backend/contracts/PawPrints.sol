@@ -13,9 +13,10 @@ contract PawPrints {
         uint petId;
         uint billAmount;
         uint recordId;
+        uint hashRecord;
     }
 
-    mapping(uint256 => MedicalRecord) public record;
+     mapping(uint256 => MedicalRecord) public record;
 
     event visited();
     event verified();
@@ -64,7 +65,7 @@ contract PawPrints {
     
     // Hospital creates new medical record
     // 入参还可以补充
-    function newMedicalRecord (uint _ownerId, uint _petId, uint _billAmount, uint _recordId, address ownerAddress) 
+    function   newMedicalRecord  (uint _ownerId, uint _petId, uint _billAmount, uint _recordId, address ownerAddress, uint _hashRecord) 
         public onlyHospital
     {
         emit visited();
@@ -76,6 +77,7 @@ contract PawPrints {
         newRecord.petId = _petId;
         newRecord.billAmount = _billAmount;
         newRecord.recordId = _recordId;
+        newRecord.hashRecord = _hashRecord;
 
         state = State.visitedHospital;
     }
@@ -90,7 +92,7 @@ contract PawPrints {
 
 
     // Insurance Provider verifies Pet's insurance and whether owner really go to hospital
-    function verify (address insuranceAddress, bool validHospital, bool overR)
+    function verify (uint _ownerId, uint _petId, address insuranceAddress, bool overR)
         external onlyInsuranceProvider inState(State.insuranceProvided) returns(bool)
     {
         emit verified();
@@ -99,8 +101,11 @@ contract PawPrints {
             return true;
         }    
         
+        //这里是有bug的，需要把insurance.sol分到单独文件
+        //正常的话insurance会抛出异常，需要借助
+        
         bool manualCheckPass = insurance(insuranceAddress).checkExpired();
-        if(manualCheckPass && validHospital){
+        if(manualCheckPass){
             state = State.insuranceVerified;
             return true;
         }
