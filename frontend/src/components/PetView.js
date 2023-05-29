@@ -70,14 +70,12 @@ const PetView = () => {
                   </Box>
                 </Box>
               </CardContent>
-              {role==="pet owner"&&<CardActions sx={{ mt: 'auto', justifyContent: 'flex-end' }}>
-                <Button size="small" variant="" onClick={handleClick}>Share</Button>
               <CardActions sx={{ mt: 'auto', justifyContent: 'flex-end' }}>
                 <Button size="small" variant="">Share</Button>
                 <Link to="/editpet">
                   <Button size="small" variant="">Edit</Button>
                 </Link>
-              </CardActions>}
+              </CardActions>
             </Box>
           </Card>
         </Grid>

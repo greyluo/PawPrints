@@ -35,10 +35,9 @@ const Profile = ({token, role,setToken}) => {
 
     return (
         <Box
-         elevation={3}
           sx={{
             p: 4,
-
+            bgcolor: 'background.default',
             minHeight: '100vh'
           }}
         >
