@@ -44,7 +44,6 @@ const Profile = ({token, role,setToken}) => {
         >
           {user !== null && (
             <Paper
-                elevation={1}
               sx={{
                 p: 4,
                 textAlign: 'center',
