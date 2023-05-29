@@ -56,8 +56,8 @@ const  SignIn = ( {setToken,setRole}) =>{
       alert("Invalid email or password");
       return;
     }
-    setToken(data);
-    setRole(data);
+    setToken({token:data.token});
+    setRole({role:data.role});
     navigate("/dashboard");
   }
   return (

@@ -85,7 +85,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 
-export default function Bar({setToken}) {
+export default function Bar({setToken, token, role}) {
   const matches = useMediaQuery((theme) => theme.breakpoints.down('sm'));
   const [open, setOpen] = React.useState(!matches);
   const toggleDrawer = () => {
@@ -152,7 +152,7 @@ export default function Bar({setToken}) {
 
             <MainListItems setToken={setToken}></MainListItems>
             <Divider variant="middle" sx={{ my: 1 }} />
-            <SecondaryListItems open = {open}>
+            <SecondaryListItems setToken={setToken} open = {open} token ={token} role={role}>
             </SecondaryListItems>
           </List>
         </Drawer>

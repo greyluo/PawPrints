@@ -17,6 +17,7 @@ export function MainListItems({setToken}) {
   const handleLogout = () => {
     setToken({token:null});
   };
+
   return (
     <React.Fragment>
     <Link href="/dashboard" underline="none" color="inherit">
@@ -52,23 +53,37 @@ export function MainListItems({setToken}) {
   );
 }
 
-export function SecondaryListItems({ open }) {
+export function SecondaryListItems({ setToken, open, token, role }) {
+  const handleLogout = () => {
+    setToken({token:null});
+  };
   const [pets, setPets] = useState([]);
 
   useEffect(() => {
     // Fetch the list of pets from the server using a GET request
-    fetch('http://localhost:8080/getpets') // Replace '/getpets' with your actual endpoint to fetch the list of pets
-      .then(response => response.json())
+    if(role.role==="pet owner"){
+      fetch('http://localhost:8080/getpets', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          // Add any additional headers as needed
+        },
+      })
+      .then(response => {
+        if (response.status === 401) {
+          handleLogout();
+        } else {
+        response.json()}})
       .then(data => setPets(data))
       .catch(error => console.error(error));
+    }
   }, []);
-  console.log(pets)
 
   return (
     <React.Fragment>
       {open && <ListSubheader component="div">Your Pets</ListSubheader>}
 
-      {pets[0]!=undefined && pets[0].map(pet => (
+      {pets[0]!==undefined && pets[0].map(pet => (
         <Link key={pet.id} href={`/petview/${pet.id}`} underline="none" color="inherit">
           <ListItemButton>
             <ListItemIcon>

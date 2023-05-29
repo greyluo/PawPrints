@@ -21,6 +21,7 @@ import PetView from './components/PetView';
 import EditPet from './components/EditPet';
 import useToken from './components/useToken';
 import useRole from './components/useRole';
+import { useEffect } from 'react';
 
 function Copyright(props) {
   return (
@@ -56,6 +57,7 @@ function RedirectToSignIn() {
 function App() {
   const { token, setToken } = useToken();
   const { role, setRole } = useRole();
+
   if (!token) {
     return (
       <Routes>
@@ -71,7 +73,7 @@ function App() {
        <CssBaseline />
       <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
-        {role ==="pet owner"&&<Bar setToken={setToken} />}
+        {<Bar setToken={setToken} role={role} token = {token}/>}
         <Box
           component="main"
           sx={{
@@ -88,11 +90,11 @@ function App() {
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Routes>
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/addPet" element={<AddPet />} />
+              <Route path="/profile" element={<Profile setToken={setToken} token= {token} role={role} />} />
+              {role==="pet owner" && <Route path="/addPet" element={<AddPet token = {token} />} />}
               <Route path= "/signup" element={<SignUp />} />
-              <Route path="/petview/:id" element={<PetView />} />
-              <Route path="/editpet" element={<EditPet />} />
+              <Route path="/petview/:id" element={<PetView role={role}  />} />
+              <Route path="/editpet" element={<EditPet  />} />
               <Route path="/signup" element={<SignUp />} />
 
             </Routes>

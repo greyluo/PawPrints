@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 //react function component
-function AddPet() {
+function AddPet({token}) {
   const navigate = useNavigate();
   const [name, setName] = React.useState("");
   const [species, setSpecies] = React.useState("");
@@ -46,14 +46,15 @@ function AddPet() {
       isNeutered,
       weight,
       insuranceProvider,
-      ownerId: 1, // Temporarily hardcoded, update this with the actual owner's id
     };
 
     try {
       const response = await fetch('http://localhost:8080/addpet', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+
         },
         body: JSON.stringify(pet)
       });

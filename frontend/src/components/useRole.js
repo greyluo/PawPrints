@@ -10,7 +10,7 @@ export default function useRole() {
   const [role, setRole] = useState(getRole());
 
   const saveRole = userRole => {
-    localStorage.setItem('role', JSON.stringify(userRole.role));
+    localStorage.setItem('role', JSON.stringify(userRole));
     setRole(userRole.role);
   };
 
