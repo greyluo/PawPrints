@@ -302,16 +302,16 @@ function AddPet({token}) {
                 <InputLabel
                   sx={labelStyle}
                 >
-                  Sex
+                  Gender
                 </InputLabel>
               </Grid>
               <Grid item  md={8}>
                 <Select
                     fullWidth
                     size="small"
-                    labelId="Sex"
-                    label="sex"
-                    name='sex'
+                    labelId="Gender"
+                    label="gender"
+                    name='gender'
                     onChange={e => setGender(e.target.value)}
                     value={gender}
                 >

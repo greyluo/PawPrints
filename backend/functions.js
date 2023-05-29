@@ -2,7 +2,7 @@ const Web3 = require("web3");
 require("dotenv").config();
 
 const fs = require("fs");
-const { abi, bytecode } = JSON.parse(fs.readFileSync("./build/contracts/PawPrints.json"));
+const { abi, bytecode } = JSON.parse(fs.readFileSync("../backend/build/contracts/PawPrints.json"));
 const web3 = new Web3('https://rpc-mumbai.maticvigil.com');
 const Tx = require('@ethereumjs/tx').Transaction;
 
@@ -150,3 +150,15 @@ function sign(tx, privateKey){
     });
   });
 }
+
+
+// export {ViewMedicalRecord};
+
+module.exports = {deploy,
+                  ViewMedicalRecord, 
+                  CreateMedicalRecord, 
+                  setInsurance, 
+                  CreateAccount, 
+                  verify, 
+                  reimbursement
+};
