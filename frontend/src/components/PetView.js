@@ -103,7 +103,7 @@ const PetView = ({role,token}) => {
                   </Box>
                 </Box>
               </CardContent>
-              {token==="pet owner"&&<CardActions sx={{ mt: 'auto', justifyContent: 'flex-end' }}>
+              {role==="pet owner"&&<CardActions sx={{ mt: 'auto', justifyContent: 'flex-end' }}>
                 <Button size="small" variant="" onClick={handleClick}>Share</Button>
                 <Link to="/editpet">
                   <Button size="small" variant="">Edit</Button>
