@@ -16,7 +16,7 @@ export default function RecordList({ role, token, id}) {
     // More records...
   ]);
   useEffect(() => {
-    fetch(`/api/medical_records/${id}`, {
+    fetch(`http://localhost:8080/getrecords/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -50,6 +50,7 @@ export default function RecordList({ role, token, id}) {
             </Button>
           </Box>
           <List>
+          {console.log(medicalRecords)}
             {medicalRecords.map((record) => (
               <ListItem key={record.record_id}>
                 <ListItemText

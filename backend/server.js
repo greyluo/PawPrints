@@ -331,9 +331,10 @@ app.post('/createRecord',authenticateUser,async (req, res) =>{
   const {address, private_key} = hospitalInfo[0][0];
 
   // 用hospital的密钥deploy合约
-  const contractAddress = functions.deploy(private_key);
+  const contractAddress = await functions.deploy(private_key);
 
-  const {petId, visitedDate, diagnosis, procedure, prescription, procedureFee, medicationFee, notes } = req.body;
+  const {petId, visitedDate, diagnosis, procedure, prescription, procedureFee, medicationFee, notes, title } = req.body;
+  console.log(title)
 
   //Find owner id by pet id
   try {
@@ -348,17 +349,16 @@ app.post('/createRecord',authenticateUser,async (req, res) =>{
   const ownerAddress = ownerInfo[0][0].address;
   const billAmount = procedureFee + medicationFee;
   const [rows] = await pool.query(
-    `INSERT INTO medical_records (pet_id, hospital_id, visited_date, diagnosis, medical_procedure, prescription, procedure_fee, medication_fee, notes)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [parseInt(petId), hospitalId, visitedDate, diagnosis, procedure, prescription, parseInt(procedureFee), parseInt(medicationFee), notes]
+    `INSERT INTO medical_records (pet_id, hospital_id, visited_date, diagnosis, medical_procedure, prescription, procedure_fee, medication_fee, notes, title)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [parseInt(petId), hospitalId, visitedDate, diagnosis, procedure, prescription, parseInt(procedureFee), parseInt(medicationFee), notes, title]
   );
   const hash = functions.createHash(petId, hospitalId, visitedDate, diagnosis, procedure, prescription, procedureFee, medicationFee);
-  console.log(hash);
   const recordId = rows.insertId;
-
+  console.log(contractAddress, address, private_key, ownerId, petId, billAmount, recordId, ownerAddress, "0x"+hash)
   functions.CreateMedicalRecord(
     contractAddress, address, private_key,
-    ownerId, petId, billAmount, recordId, ownerAddress, hash
+    ownerId, petId, billAmount, recordId, ownerAddress, "0x"+hash
   );
 
   res.status(200).json({ message: 'Record created successfully', recordId: recordId });
@@ -380,6 +380,17 @@ app.get('/setInsurance', (req,res) =>{
 })
 
 
+app.get('/getrecords/:petId',authenticateUser, async (req, res) => {
+  const petId = req.params.petId;
+  console.log(petId);
 
+  try {
+    const [rows] = await pool.query('SELECT * FROM medical_records WHERE pet_id = ?', [petId]);
+    res.json(rows);
+
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred when retrieving data.' });
+  }
+});
 
 app.listen(8080, () => console.log('API is running on http://localhost:8080'));

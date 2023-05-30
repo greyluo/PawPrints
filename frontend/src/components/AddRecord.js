@@ -18,7 +18,8 @@ export default function CreateMedicalRecordForm({token}) {
         prescription: '',
         procedureFee: '',
         medicationFee: '',
-        notes: ''
+        notes: '',
+        title: '',
       });
       const handleChange = (e) => {
         setRecord({ ...record, [e.target.id]: e.target.value });
@@ -62,6 +63,9 @@ export default function CreateMedicalRecordForm({token}) {
             onSubmit={handleSubmit}
         >
             <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <TextField required fullWidth id="title" label="Title" type="title" InputLabelProps={{ shrink: true }} value={record.title} onChange={handleChange}  />
+            </Grid>
             <Grid item xs={12}>
                 <TextField required fullWidth id="visitedDate" label="Visited Date" type="date" InputLabelProps={{ shrink: true }} value={record.visitedDate} onChange={handleChange}  />
             </Grid>

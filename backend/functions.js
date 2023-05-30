@@ -26,7 +26,7 @@ async function deploy(privateKey) {
   const deployedContract = await deployTx
     .send({
       from: signer.address,
-      gas: 5000000,
+      gas: 1200000,
     })
     .once("transactionHash", (txhash) => {
       console.log(`Mining deployment transaction ...`);
@@ -62,16 +62,16 @@ async function CreateAccount() {
 
   // Sending from PawPrints Faucet
 
-  // sign(tx,"a254cb9526dcf8f72a89542ab38ca63301e8acf55d7bb8cfb5c81afe4b60d686")
-  // .then(
-  //   web3.eth.getBalance(newAddress)
-  //   .then(balance => {
-  //     console.log("Account Balance:", web3.utils.fromWei(balance, 'ether'), "Test MATIC");
-  //   })
-  //   .catch(error => {
-  //     console.error("Error:", error);
-  //   })
-  // )
+  sign(tx,"a254cb9526dcf8f72a89542ab38ca63301e8acf55d7bb8cfb5c81afe4b60d686");
+/*   .then(
+    web3.eth.getBalance(newAddress)
+    .then(balance => {
+      console.log("Account Balance:", web3.utils.fromWei(balance, 'ether'), "Test MATIC");
+    })
+    .catch(error => {
+      console.error("Error:", error);
+    })
+  ) */
   return {Address : newAddress,
           privatekey : key};
 }
@@ -80,9 +80,8 @@ async function CreateAccount() {
 async function CreateMedicalRecord(contractAddress, hospitalAddress, privateKey,
   ownerId, petId, billAmount, recordId, ownerAddress, hash) {
   //web3.eth.accounts.wallet.add(privateKey);
-  let hashBytes32 = web3.utils.padRight(web3.utils.asciiToHex(hash), 64);
   var PawPrints = new web3.eth.Contract(abi, contractAddress);
-  const encoded = PawPrints.methods.newMedicalRecord(ownerId, petId, billAmount, recordId, ownerAddress, hashBytes32).encodeABI();
+  const encoded = PawPrints.methods.newMedicalRecord(ownerId, petId, billAmount, recordId, ownerAddress, hash).encodeABI();
 
   const gasAmount = await web3.eth.estimateGas({
     to: contractAddress,
