@@ -1,5 +1,5 @@
 const Web3 = require("web3");
-require("dotenv").config();
+// require("dotenv").config();
 
 const fs = require("fs");
 const { abi, bytecode } = JSON.parse(fs.readFileSync("../backend/build/contracts/PawPrints.json"));
@@ -9,7 +9,7 @@ const web3 = new Web3('https://rpc-mumbai.maticvigil.com');
 async function deploy(privateKey) {
   // Configuring the connection to an Ethereum node
   const network = "Polygon Mumbai Testnet";
-    // Creating a signing account from a private key
+  // Creating a signing account from a private key
   const signer = web3.eth.accounts.privateKeyToAccount(privateKey);
   web3.eth.accounts.wallet.add(signer);
 
@@ -31,47 +31,79 @@ async function deploy(privateKey) {
   return deployedContract.options.address;
 }
 
-async function CreateAccount(){
-    var usr = web3.eth.accounts.create();
-    console.log(usr);
+async function CreateAccount() {
+  var newAccount = web3.eth.accounts.create();
+  const newAddress = newAccount.address;
+  const key = newAccount.privateKey;
+
+  console.log("Account created with public address:", newAddress);
+  console.log("Sending 0.01 matic for testing...")
+  /**
+   * Danger zone
+   * 
+   * As demo, we will be sending 0.01 matic to the new account
+   * for it to perform test transactions, this will be resolved in future
+   */
+  const amount = web3.utils.toWei('0.01', 'ether'); // 1 MATIC
+  const gasLimit = 21000; // Gas limit for a basic transfer
+  const tx = {
+    to: newAddress,
+    value: amount,
+    gas: gasLimit
+  };
+
+  // Open this on demo day
+
+  // sign(tx,"8a44399ff29f878fdfa6cd371f7a7e6655240c211ceea62ea0566fe7bc82dbfe")
+  // .then(
+  //   web3.eth.getBalance(newAddress)
+  //   .then(balance => {
+  //     console.log("Account Balance:", web3.utils.fromWei(balance, 'ether'), "Test MATIC");
+  //   })
+  //   .catch(error => {
+  //     console.error("Error:", error);
+  //   })
+  // )
+  return {Address : newAddress,
+          privatekey : key};
 }
 
 // parameters contractAddress, hospitalAddress, privateKey(of Hospital), ownerId, petId, billAmount, recordId, ownerAddress
 async function CreateMedicalRecord(contractAddress, hospitalAddress, privateKey,
-                  ownerId, petId, billAmount, recordId, ownerAddress) {
-    //web3.eth.accounts.wallet.add(privateKey);
-    var PawPrints = new web3.eth.Contract(abi, contractAddress);
-    const encoded = PawPrints.methods.newMedicalRecord(ownerId, petId, billAmount, recordId, ownerAddress).encodeABI();
-    
-    const gasAmount = await web3.eth.estimateGas({
-      to: contractAddress,
-      from: hospitalAddress,
-      data: encoded
-    });
+  ownerId, petId, billAmount, recordId, ownerAddress) {
+  //web3.eth.accounts.wallet.add(privateKey);
+  var PawPrints = new web3.eth.Contract(abi, contractAddress);
+  const encoded = PawPrints.methods.newMedicalRecord(ownerId, petId, billAmount, recordId, ownerAddress).encodeABI();
 
-    console.log("Estimate Gas: ", gasAmount)
-    
-    var tx = {
-      from: hospitalAddress,
-      to: contractAddress,
-      gas: gasAmount+1314,
-      data: encoded
-    }
+  const gasAmount = await web3.eth.estimateGas({
+    to: contractAddress,
+    from: hospitalAddress,
+    data: encoded
+  });
 
-    sign(tx, privateKey);
+  console.log("Estimate Gas: ", gasAmount)
+
+  var tx = {
+    from: hospitalAddress,
+    to: contractAddress,
+    gas: gasAmount + 1314,
+    data: encoded
+  }
+
+  sign(tx, privateKey);
 }
 
 
-async function ViewMedicalRecord(contractAddress){
-    var PawPrints = new web3.eth.Contract(abi, contractAddress);
-    
-    var record = await PawPrints.methods.getMedicalRecord().call();
-    console.log("Medical Record: ", record);
-    return record;
+async function ViewMedicalRecord(contractAddress) {
+  var PawPrints = new web3.eth.Contract(abi, contractAddress);
+
+  var record = await PawPrints.methods.getMedicalRecord().call();
+  console.log("Medical Record: ", record);
+  return record;
 }
 
 
-async function setInsurance(contractAddress, ownerAddress, insuranceAddress, privateKey){
+async function setInsurance(contractAddress, ownerAddress, insuranceAddress, privateKey) {
   var PawPrints = new web3.eth.Contract(abi, contractAddress);
   const encoded = PawPrints.methods.setInsurance(insuranceAddress).encodeABI();
 
@@ -84,17 +116,17 @@ async function setInsurance(contractAddress, ownerAddress, insuranceAddress, pri
   var tx = {
     from: ownerAddress,
     to: contractAddress,
-    gas: gasAmount+1314,
+    gas: gasAmount + 1314,
     data: encoded
   }
 
   sign(tx, privateKey);
 }
 
-async function verify (contractAddress, insuranceAddress, validHospital, overR, privateKey){
+async function verify(contractAddress, insuranceAddress, validHospital, overR, privateKey) {
   var PawPrints = new web3.eth.Contract(abi, contractAddress);
   // const encoded = PawPrints.methods.verify(insuranceAddress,validHospital,overR).encodeABI()
-  const verified = PawPrints.methods.verify(insuranceAddress,validHospital,overR)
+  const verified = PawPrints.methods.verify(insuranceAddress, validHospital, overR)
   const encoded = verified.encodeABI();
 
   const gasAmount = await web3.eth.estimateGas({
@@ -106,14 +138,14 @@ async function verify (contractAddress, insuranceAddress, validHospital, overR, 
   var tx = {
     from: insuranceAddress,
     to: contractAddress,
-    gas: gasAmount+1314,
+    gas: gasAmount + 1314,
     data: encoded
   }
 
   sign(tx, privateKey);
 }
 
-async function reimbursement (contractAddress, insuranceAddress, privateKey){
+async function reimbursement(contractAddress, insuranceAddress, privateKey) {
   var PawPrints = new web3.eth.Contract(abi, contractAddress);
   const encoded = PawPrints.methods.reimbursement().encodeABI();
 
@@ -126,32 +158,32 @@ async function reimbursement (contractAddress, insuranceAddress, privateKey){
   var tx = {
     from: insuranceAddress,
     to: contractAddress,
-    gas: gasAmount+1314,
+    gas: gasAmount + 1314,
     data: encoded
   }
 
   sign(tx, privateKey);
 }
 
-function sign(tx, privateKey){
+function sign(tx, privateKey) {
   web3.eth.accounts.signTransaction(tx, privateKey).then(signed => {
     web3.eth.sendSignedTransaction(signed.rawTransaction)
-    .on('transactionHash', (hash) => {
-      console.log('Transaction hash:', hash);
-      // You can use the transaction hash for further operations or tracking
-    })
-    // .on('confirmation', (confirmationNumber) => {
-    //   // Transaction confirmation event
-    //   console.log('Confirmation number:', confirmationNumber);
-    // })
-    .on('error', (error) => {
-      // Transaction error event
-      console.error('Error:', error);
-    });
+      .on('transactionHash', (hash) => {
+        console.log('Transaction hash:', hash);
+        // You can use the transaction hash for further operations or tracking
+      })
+      // .on('confirmation', (confirmationNumber) => {
+      //   // Transaction confirmation event
+      //   console.log('Confirmation number:', confirmationNumber);
+      // })
+      .on('error', (error) => {
+        // Transaction error event
+        console.error('Error:', error);
+      });
   });
 }
 
-async function getAddresses (contractAddress){
+async function getAddresses(contractAddress) {
   var PawPrints = new web3.eth.Contract(abi, contractAddress);
   const ownerAddress = await PawPrints.methods.owner().call();
   const insuranceAddress = await PawPrints.methods.insuranceProvider().call();
@@ -164,14 +196,17 @@ async function getAddresses (contractAddress){
 
 // export {ViewMedicalRecord};
 
-module.exports = {deploy,
-                  ViewMedicalRecord, 
-                  CreateMedicalRecord, 
-                  setInsurance, 
-                  CreateAccount, 
-                  verify, 
-                  reimbursement,
-                  getAddresses
+module.exports = {
+  deploy,
+  ViewMedicalRecord,
+  CreateMedicalRecord,
+  setInsurance,
+  CreateAccount,
+  verify,
+  reimbursement,
+  getAddresses
 };
 
-getAddresses("0x83b4F166e1eA0f04238f0a7a0347275895CaC0D0");
+//getAddresses("0x83b4F166e1eA0f04238f0a7a0347275895CaC0D0");
+
+//CreateAccount();
