@@ -13,7 +13,7 @@ contract PawPrints {
         uint petId;
         uint billAmount;
         uint recordId;
-        uint hashRecord;
+        bytes32 hashRecord;
     }
 
      mapping(uint256 => MedicalRecord) public record;
@@ -69,7 +69,7 @@ contract PawPrints {
                                 uint _billAmount, 
                                 uint _recordId, 
                                 address ownerAddress, 
-                                uint _hashRecord) 
+                                bytes32 _hashRecord) 
         public onlyHospital inState(State.deployed)
     {
         
