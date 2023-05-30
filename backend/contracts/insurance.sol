@@ -10,7 +10,6 @@ contract insurance {
         provider = msg.sender; 
     }
 
-    // 只有insurance provider 才有权限
     modifier onlyProvider(){
         require(
             msg.sender == provider,
@@ -28,8 +27,9 @@ contract insurance {
         return address(this);
     }
 
-    // 如果没有过期，通过require返回，并不花费gas
-    // 如果过期，修改duration
+
+    // If not expired, using require to return without spending gas
+    // If expired, it will set the duration to 0
     function checkExpired() external returns(bool) {
         require(block.timestamp >= (insuranceRecord[address(this)] + duration), "Check passed, insurance NOT expired");
 

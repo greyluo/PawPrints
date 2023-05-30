@@ -6,7 +6,7 @@ contract PawPrints {
     
     address public owner;
     address public insuranceProvider;
-    address public hospital; //医院为创建合约的人
+    address public hospital; 
 
     struct MedicalRecord {
         uint ownerId;
@@ -17,16 +17,16 @@ contract PawPrints {
     }
 
      mapping(uint256 => MedicalRecord) public record;
-
-    event visited();
-    event verified();
-    event sent();
-    event reimbursed();
-
-    enum State {visitedHospital, insuranceProvided, insuranceVerified, reimbursed, invalid}
+    
+    enum State {deployed, 
+                visitedHospital, 
+                insuranceProvided, 
+                insuranceVerified, 
+                reimbursed, 
+                invalid}
     State public state;
 
-
+    // Hospital will be the one deploying the contract
     constructor() {
         hospital = msg.sender;
     }
@@ -64,14 +64,19 @@ contract PawPrints {
     }
     
     // Hospital creates new medical record
-    // 入参还可以补充
-    function   newMedicalRecord  (uint _ownerId, uint _petId, uint _billAmount, uint _recordId, address ownerAddress, uint _hashRecord) 
-        public onlyHospital
+    function   newMedicalRecord  (uint _ownerId, 
+                                uint _petId, 
+                                uint _billAmount, 
+                                uint _recordId, 
+                                address ownerAddress, 
+                                uint _hashRecord) 
+        public onlyHospital inState(State.deployed)
     {
-        emit visited();
         
+        // Hospital set the address of owner
         owner = ownerAddress;
 
+        // Store record on chain
         MedicalRecord storage newRecord = record[1];
         newRecord.ownerId = _ownerId;
         newRecord.petId = _petId;
@@ -92,19 +97,16 @@ contract PawPrints {
 
 
     // Insurance Provider verifies Pet's insurance and whether owner really go to hospital
-    function verify (uint _ownerId, uint _petId, address insuranceAddress, bool overR)
+    function verify (address insuranceAddress, bool overR)
         external onlyInsuranceProvider inState(State.insuranceProvided) returns(bool)
     {
-        emit verified();
-        // hospital 手动验证 insurance 自动验证
+        // Verification result from 3rd party insurance company
         if (overR){
             state = State.insuranceVerified;
             return true;
         }    
         
-        //这里是有bug的，需要把insurance.sol分到单独文件
-        //正常的话insurance会抛出异常，需要借助
-        
+        // Auto verifiation using side-contract insurance.sol
         bool manualCheckPass = insurance(insuranceAddress).checkExpired();
         if(manualCheckPass){
             state = State.insuranceVerified;
@@ -124,13 +126,8 @@ contract PawPrints {
 
     // Insurance company return money back to pet owner
     function reimbursement () 
-        public 
-        onlyInsuranceProvider
-        inState(State.insuranceVerified)
-
+        public onlyInsuranceProvider inState(State.insuranceVerified)
     {
-        emit reimbursed();
-
         state = State.reimbursed;
     }
 }
