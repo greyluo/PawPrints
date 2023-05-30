@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Paper, Box, TextField, Button, Typography } from '@mui/material';
 
-function LinkPet({token}) {
-  const [petToken, setPetToken] = useState("");
+function LinkPet() {
+  const [token, setToken] = useState("");
   const [name, setName] = useState("");
-  const [petId, setPetId] = useState("");
   const navigate = useNavigate();
 
   const handleTokenChange = (event) => {
-    setPetToken(event.target.value);
+    setToken(event.target.value);
   };
 
   const handleNameChange = (event) => {
@@ -20,23 +19,19 @@ function LinkPet({token}) {
     event.preventDefault();
     // API request logic here
     try {
-      const response = await fetch('http://localhost:8080/verifyPetToken', {
-        method: 'PUT',
+      const response = await fetch('/', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ petToken, name}),
+        body: JSON.stringify({ token, name }),
       });
 
       const data = await response.json();
-      const petId = data.id;
-
-
 
       if (response.ok) {
         // Navigate to a different page on success
-        navigate("/dashboard");
+        navigate("/success-page");
       } else {
         // Handle errors
         console.error(data);
@@ -66,7 +61,7 @@ function LinkPet({token}) {
             margin="normal"
             label="Token"
             variant="outlined"
-            value={petToken}
+            value={token}
             onChange={handleTokenChange}
           />
           <TextField

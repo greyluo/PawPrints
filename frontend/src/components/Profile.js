@@ -35,15 +35,15 @@ const Profile = ({token, role,setToken}) => {
 
     return (
         <Box
+         elevation={3}
           sx={{
             p: 4,
-            bgcolor: 'background.default',
+
             minHeight: '100vh'
           }}
         >
           {user !== null && (
             <Paper
-                elevation={1}
               sx={{
                 p: 4,
                 textAlign: 'center',

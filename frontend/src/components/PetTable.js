@@ -1,48 +1,21 @@
 import React from 'react';
 import { Typography } from '@mui/material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Link, TextField, Box } from '@mui/material';
-import { useState, useEffect } from 'react';
-
+import { useState } from 'react';
 // Assuming this is your data
+const data = [
+  { petName: 'Fido', ownerName: 'John Doe', petLink: '/fido', staffName: 'Staff 1' },
+  { petName: 'Spot', ownerName: 'Jane Doe', petLink: '/spot', staffName: 'Staff 2' },
+  // ... more data
+];
 
-
-function PetTable({token,setToken}) {
-    const handleLogout = () => {
-        setToken({token:null});
-      };
-
-    const [data, setData] = useState([]);
+function PetTable() {
     const [searchTerm, setSearchTerm] = useState("");
-    useEffect(() => {
-        fetch('http://localhost:8080/getpetbyhospital', {
-            headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-            // Add any additional headers as needed
-            },
-        }).then(response => {
-            if (response.status === 401) {
-                handleLogout();
-              }
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-
-            else {return response.json();}
-          })
-          .then(petData => {
-            setData(petData)
-            console.log(petData)
-        })
-          .catch(error => {
-            console.error('There has been a problem with your fetch operation:', error);
-          });
-      }, []);
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
       };
       const filteredData = data.filter((item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.owner_name.toLowerCase().includes(searchTerm.toLowerCase())
+      item.petName.toLowerCase().includes(searchTerm.toLowerCase()) || item.ownerName.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -89,12 +62,12 @@ function PetTable({token,setToken}) {
                   <TableRow key={index}>
                     <TableCell component="th" scope="row">{index + 1}</TableCell>
                     <TableCell>
-                      <Link href={`/petview/${row.id}`} underline="hover" color="inherit">
-                        {row.name}
+                      <Link href={row.petLink} underline="hover" color="inherit">
+                        {row.petName}
                       </Link>
                     </TableCell>
-                    <TableCell>{row.owner_name}</TableCell>
-                    <TableCell>{row.staff_name}</TableCell>
+                    <TableCell>{row.ownerName}</TableCell>
+                    <TableCell>{row.staffName}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
