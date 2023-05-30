@@ -70,10 +70,10 @@ async function CreateAccount() {
 
 // parameters contractAddress, hospitalAddress, privateKey(of Hospital), ownerId, petId, billAmount, recordId, ownerAddress
 async function CreateMedicalRecord(contractAddress, hospitalAddress, privateKey,
-  ownerId, petId, billAmount, recordId, ownerAddress) {
+  ownerId, petId, billAmount, recordId, ownerAddress, hash) {
   //web3.eth.accounts.wallet.add(privateKey);
   var PawPrints = new web3.eth.Contract(abi, contractAddress);
-  const encoded = PawPrints.methods.newMedicalRecord(ownerId, petId, billAmount, recordId, ownerAddress).encodeABI();
+  const encoded = PawPrints.methods.newMedicalRecord(ownerId, petId, billAmount, recordId, ownerAddress, hash).encodeABI();
 
   const gasAmount = await web3.eth.estimateGas({
     to: contractAddress,
