@@ -61,7 +61,7 @@ export function SecondaryListItems({ setToken, open, token, role }) {
 
   useEffect(() => {
     // Fetch the list of pets from the server using a GET request
-    if(role.role==="pet owner"){
+    if(role==="pet owner"){
       fetch('http://localhost:8080/getpets', {
         headers: {
           'Content-Type': 'application/json',
@@ -73,17 +73,26 @@ export function SecondaryListItems({ setToken, open, token, role }) {
         if (response.status === 401) {
           handleLogout();
         } else {
-        response.json()}})
-      .then(data => setPets(data))
+          // Return the result of the json parsing so it can be used in the next then
+          return response.json();
+        }
+      })
+      .then(
+        data => {
+          setPets(data)
+        })
+
       .catch(error => console.error(error));
     }
   }, []);
+
 
   return (
     <React.Fragment>
       {open&&role==="pet owner" && <ListSubheader component="div">Your Pets</ListSubheader>}
 
-      {pets[0]!==undefined && pets[0].map(pet => (
+      {pets!==undefined && pets.map(pet => (
+
         <Link key={pet.id} href={`/petview/${pet.id}`} underline="none" color="inherit">
           <ListItemButton>
             <ListItemIcon>
