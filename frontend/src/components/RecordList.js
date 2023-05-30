@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect } from 'react';
-
+import { Card, CardHeader } from '@mui/material';
 export default function RecordList({ role, token, id}) {
   const [medicalRecords,setMedicalRecords] = React.useState([
     { record_id: 1, title: 'Visit 1', visited_date: '2022-01-01' },
@@ -49,17 +49,23 @@ export default function RecordList({ role, token, id}) {
                 <AddIcon />
             </Button>
           </Box>
-          <List>
-          {console.log(medicalRecords)}
-            {medicalRecords.map((record) => (
-              <ListItem key={record.record_id}>
-                <ListItemText
-                  primary={<Link to={`/records/${record.record_id}`} underline="hover" color="inherit">{record.title}</Link>}
-                  secondary={`Visited Date: ${record.visited_date}`}
-                />
-              </ListItem>
-            ))}
-          </List>
+          <Typography variant="body2" color="text.secondary">
+          {medicalRecords.map(record => (
+            <Card elevation={2} key={record.id} sx={{ marginBottom: 5 }}>
+              <CardHeader
+                title={
+                  <Link
+                    to={`/record/${record.id}`}
+                    style={{ color: 'inherit' }}
+                  >
+                    {record.title}
+                  </Link>
+                }
+                subheader={`Visited Date: ${new Date(record.visited_date).toLocaleDateString()}`}
+              />
+            </Card>
+          ))}
+        </Typography>
         </Box>
       </Paper>
     </Grid>

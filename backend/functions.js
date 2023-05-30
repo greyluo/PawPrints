@@ -32,7 +32,7 @@ async function deploy(privateKey) {
       console.log(`Mining deployment transaction ...`);
     });
   // The contract is now deployed on chain!
-  console.log(`Contract deployed at ${deployedContract.options.address}`);
+  console.log(`Contract d ployed at ${deployedContract.options.address}`);
 
   return deployedContract.options.address;
 }
@@ -98,7 +98,7 @@ async function CreateMedicalRecord(contractAddress, hospitalAddress, privateKey,
     data: encoded
   }
 
-  sign(tx, privateKey);
+  return await sign(tx, privateKey);
 }
 
 
@@ -173,23 +173,19 @@ async function reimbursement(contractAddress, insuranceAddress, privateKey) {
   sign(tx, privateKey);
 }
 
-function sign(tx, privateKey) {
-  web3.eth.accounts.signTransaction(tx, privateKey).then(signed => {
-    web3.eth.sendSignedTransaction(signed.rawTransaction)
-      .on('transactionHash', (hash) => {
-        console.log('Transaction hash:', hash);
-        // You can use the transaction hash for further operations or tracking
-      })
-      // .on('confirmation', (confirmationNumber) => {
-      //   // Transaction confirmation event
-      //   console.log('Confirmation number:', confirmationNumber);
-      // })
-      .on('error', (error) => {
-        // Transaction error event
-        console.error('Error:', error);
-      });
-  });
+async function sign(tx, privateKey) {
+  try {
+    const signed = await web3.eth.accounts.signTransaction(tx, privateKey);
+    const receipt = await web3.eth.sendSignedTransaction(signed.rawTransaction);
+
+    console.log('Transaction hash:', receipt.transactionHash);
+    return receipt.transactionHash;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
 }
+
 
 async function getAddresses(contractAddress) {
   var PawPrints = new web3.eth.Contract(abi, contractAddress);

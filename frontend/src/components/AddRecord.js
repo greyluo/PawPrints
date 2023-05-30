@@ -7,8 +7,10 @@ import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import { useState} from 'react';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateMedicalRecordForm({token}) {
+    let navigate = useNavigate();
     const { id } = useParams();
     const [record, setRecord] = useState({
         petId: id,
@@ -36,9 +38,11 @@ export default function CreateMedicalRecordForm({token}) {
           },
           body: JSON.stringify(record),
         });
-
+        navigate(`/petview/${id}`);
         if (response.ok) {
-          console.log('Success:', response);
+
+            console.log('Success:', response);
+
         } else {
           console.error('Error:', response);
         }

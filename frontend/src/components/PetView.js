@@ -27,7 +27,7 @@ const PetView = ({role,token}) => {
       });
 
       const data = await response.json();
-
+      
       if (response.ok) {
         navigator.clipboard.writeText(data.token);
         setShowAlert(true);
@@ -99,7 +99,7 @@ const PetView = ({role,token}) => {
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <CakeIcon />
                     <Typography variant="body2" color="text.secondary">
-                      Born: {birthday}
+                      Born: {new Date(birthday).toLocaleDateString()}
                     </Typography>
                   </Box>
                 </Box>

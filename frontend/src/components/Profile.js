@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Container, Grid, Paper, Avatar } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-
+import Link from '@mui/material/Link';
 
 
 
@@ -27,7 +27,7 @@ const Profile = ({token, role,setToken}) => {
             }
             else {return response.json();}
           })
-          .then(data => setUser(data[0]))
+          .then(data => setUser(data))
           .catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
           });
@@ -37,8 +37,7 @@ const Profile = ({token, role,setToken}) => {
         <Box
          elevation={3}
           sx={{
-            p: 4,
-
+            p: 2,
             minHeight: '100vh'
           }}
         >
@@ -80,7 +79,13 @@ const Profile = ({token, role,setToken}) => {
                           Phone: {user.phone_number}
                         </Typography>
                         <Typography variant="body2" gutterBottom>
-                          Account Type : {user.type}
+                          Account Type: {user.type}
+                        </Typography>
+                        <Typography variant="body2" gutterBottom>
+
+                        <Link href={`https://mumbai.polygonscan.com/address/${user.address}`}  color="inherit">
+                          Wallet Address
+                        </Link>
                         </Typography>
                       </Box>
                     </Grid>

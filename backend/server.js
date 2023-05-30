@@ -152,10 +152,9 @@ app.post('/addpet', authenticateUser, async (req, res) => {
 
 app.get('/getuser',authenticateUser, async (req, res) => {
   try {
-    // Assuming you have a pets table in your database
 
     // Query to retrieve the pet data from the database
-    const query = 'SELECT * FROM users WHERE id = ?'; // Replace 'id' with the appropriate column name for pet identification
+    const query = 'SELECT * FROM users WHERE id = ?';
     const userId = req.id; // Retrieve the petId from the query parameter 'id'
 
     // Execute the query
@@ -166,9 +165,9 @@ app.get('/getuser',authenticateUser, async (req, res) => {
       res.status(404).json({ error: 'Pet not found' });
       return;
     }
-    const petData = results[0]; // Assuming only one pet is returned with the provided ID
+    const userData = results[0][0];
 
-    res.json(petData);
+    res.json(userData);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal server error' });
@@ -356,11 +355,12 @@ app.post('/createRecord',authenticateUser,async (req, res) =>{
   const hash = functions.createHash(petId, hospitalId, visitedDate, diagnosis, procedure, prescription, procedureFee, medicationFee);
   const recordId = rows.insertId;
   console.log(contractAddress, address, private_key, ownerId, petId, billAmount, recordId, ownerAddress, "0x"+hash)
-  functions.CreateMedicalRecord(
+  const transactionHash = await functions.CreateMedicalRecord(
     contractAddress, address, private_key,
     ownerId, petId, billAmount, recordId, ownerAddress, "0x"+hash
   );
-
+  const sql = `UPDATE medical_records SET transaction_hash = ? WHERE id = ?`;
+  pool.query(sql, [transactionHash, recordId]);
   res.status(200).json({ message: 'Record created successfully', recordId: recordId });
 
   } catch (err) {
@@ -379,10 +379,19 @@ app.get('/setInsurance', (req,res) =>{
   const findInsurance = 'SELECT address, private_key FROM users WHERE id = ?'
 })
 
+app.get('/getrecord/:recordId',authenticateUser, async (req, res) => {
+  const recordId = req.params.recordId;
+  try{
+    const data = await pool.query('SELECT * FROM medical_records WHERE id = ?', [recordId]);
+    res.json(data[0][0]);
+  }
+  catch (error) {
+    res.status(500).json({ error: 'An error occurred when retrieving data.' });
+  }
+});
 
 app.get('/getrecords/:petId',authenticateUser, async (req, res) => {
   const petId = req.params.petId;
-  console.log(petId);
 
   try {
     const [rows] = await pool.query('SELECT * FROM medical_records WHERE pet_id = ?', [petId]);
