@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
+const functions = require('./functions');
+
 
 const app = express();
 
@@ -87,6 +89,8 @@ app.post('/signup', async (req, res) => {
   if (!email || !password|| !firstName || !lastName || !userType || !phoneNumber) {
     return res.status(400).send({ error: 'Miss Fields' });
   }
+  const { Address, privatekey } = await functions.CreateAccount();
+
 
   try {
     // check if user already exists
@@ -104,8 +108,8 @@ app.post('/signup', async (req, res) => {
 
     // insert new user into the database
     const [result] = await pool.execute(
-      'INSERT INTO users (username, email, password, first_name,last_name,type, phone_number) VALUES (?, ?, ?, ?, ?, ?,?)',
-      ["",email, hashedPassword, firstName, lastName, userType, phoneNumber]
+      'INSERT INTO users (username, email, password, first_name,last_name, type, phone_number, address, private_key) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      ["",email, hashedPassword, firstName, lastName, userType, phoneNumber, Address, privatekey]
 
     );
 
@@ -297,6 +301,84 @@ app.put('/verifyPetToken',authenticateUser,(req, res) => {
 
   res.status(200).json({ petId });
 });
+
+app.get('/viewMedRecord', (req, res) =>{
+  const result = functions.ViewMedicalRecord("0x83b4f166e1ea0f04238f0a7a0347275895cac0d0");
+  const resolved = result.then((resolvedData) => {
+      console.log("Getting the record: ", resolvedData);
+      res.json({
+          ownerId: resolvedData.ownerId,
+          petId:resolvedData.petId,
+          billAmount:resolvedData.billAmount,
+          recordId:resolvedData.recordId
+       });
+  });
+})
+
+
+// 这里需要从数据库，通过前端传进来的hospital的id,在数据库里
+// 找到对应的账户地址和密钥
+// record具体内容通过前端，同时记录在chain和数据库中
+  // 数据库储存具体信息，chain储存id
+  //
+app.post('/createRecord',authenticateUser,async (req, res) =>{
+  // Finding address and key of hospital by ID
+  const findHospital = 'SELECT address, private_key FROM users WHERE id = ?'; // Replace 'id' with the appropriate column name for pet identification
+  const hospitalId = req.id; // Retrieve the petId from the query parameter 'id'
+  const hospitalInfo = await pool.query(findHospital, [hospitalId]);
+
+  // 我们想从table里拿到 address和privatekey两个column里的数据
+  const {address, private_key} = hospitalInfo[0][0];
+
+  // 用hospital的密钥deploy合约
+  const contractAddress = functions.deploy(private_key);
+
+  const {petId, visitedDate, diagnosis, procedure, prescription, procedureFee, medicationFee, notes } = req.body;
+
+  //Find owner id by pet id
+  try {
+  const findOwnerByPet = 'SELECT owner_id FROM pets WHERE id = ?';
+  const petInfo = await pool.query(findOwnerByPet, [petId]);
+  const ownerId = petInfo[0][0].owner_id;
+
+
+  // Finding address of owner by ID
+  const findOwner ='SELECT address FROM users WHERE id = ?';
+  const ownerInfo = await pool.query(findOwner, [ownerId]);
+  const ownerAddress = ownerInfo[0][0].address;
+  const billAmount = procedureFee + medicationFee;
+  const [rows] = await pool.query(
+    `INSERT INTO medical_records (pet_id, hospital_id, visited_date, diagnosis, medical_procedure, prescription, procedure_fee, medication_fee, notes)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [parseInt(petId), hospitalId, visitedDate, diagnosis, procedure, prescription, parseInt(procedureFee), parseInt(medicationFee), notes]
+  );
+  const hash = functions.createHash(petId, hospitalId, visitedDate, diagnosis, procedure, prescription, procedureFee, medicationFee);
+  console.log(hash);
+  const recordId = rows.insertId;
+
+  functions.CreateMedicalRecord(
+    contractAddress, address, private_key,
+    ownerId, petId, billAmount, recordId, ownerAddress, hash
+  );
+
+  res.status(200).json({ message: 'Record created successfully', recordId: recordId });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+
+  // After getting all data from the chain, we have to insert
+
+
+
+})
+
+
+app.get('/setInsurance', (req,res) =>{
+  const findInsurance = 'SELECT address, private_key FROM users WHERE id = ?'
+})
+
 
 
 

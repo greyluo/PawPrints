@@ -9,6 +9,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import { useParams } from 'react-router-dom';
 import {Snackbar, Alert } from '@mui/material';
 import GenderFemaleIcon from '@mui/icons-material/Female';
+import RecordList from './RecordList';
 
 const PetView = ({role,token}) => {
   const [petData, setPetData] = useState(null);
@@ -117,19 +118,9 @@ const PetView = ({role,token}) => {
             </Box>
           </Card>
         </Grid>
-        <Grid item xs={12}>
-          <Paper elevation={3}>
-            {/* Display medical records in timeline/list format*/}
-            <Box sx={{ padding: 5 }}>
-            <Typography variant="h4" component="h4" gutterBottom>
-                Medical Records
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {/* Display the medical records here */}
-              </Typography>
-            </Box>
-          </Paper>
-        </Grid>
+          <Grid item xs={12}>
+            <RecordList petId={id} token={token} role={role} id ={id}/>
+          </Grid>
       </Grid>
     </React.Fragment>
   );

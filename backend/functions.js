@@ -1,11 +1,17 @@
 const Web3 = require("web3");
 // require("dotenv").config();
-
+const crypto = require('crypto');
 const fs = require("fs");
 const { abi, bytecode } = JSON.parse(fs.readFileSync("../backend/build/contracts/PawPrints.json"));
 const web3 = new Web3('https://rpc-mumbai.maticvigil.com');
 // const Tx = require('@ethereumjs/tx').Transaction;
 
+
+function createHash(petId, hospitalId, visitedDate, diagnosis, procedure, prescription, procedureFee, medicationFee) {
+    const hash = crypto.createHash('sha256');
+    hash.update(`${petId}${hospitalId}${visitedDate}${diagnosis}${procedure}${prescription}${procedureFee}${medicationFee}`);
+    return hash.digest('hex')
+}
 async function deploy(privateKey) {
   // Configuring the connection to an Ethereum node
   const network = "Polygon Mumbai Testnet";
@@ -40,7 +46,7 @@ async function CreateAccount() {
   console.log("Sending 0.01 matic for testing...")
   /**
    * Danger zone
-   * 
+   *
    * As demo, we will be sending 0.01 matic to the new account
    * for it to perform test transactions, this will be resolved in future
    */
@@ -72,8 +78,9 @@ async function CreateAccount() {
 async function CreateMedicalRecord(contractAddress, hospitalAddress, privateKey,
   ownerId, petId, billAmount, recordId, ownerAddress, hash) {
   //web3.eth.accounts.wallet.add(privateKey);
+  let hashBytes32 = web3.utils.padRight(web3.utils.asciiToHex(hash), 64);
   var PawPrints = new web3.eth.Contract(abi, contractAddress);
-  const encoded = PawPrints.methods.newMedicalRecord(ownerId, petId, billAmount, recordId, ownerAddress, hash).encodeABI();
+  const encoded = PawPrints.methods.newMedicalRecord(ownerId, petId, billAmount, recordId, ownerAddress, hashBytes32).encodeABI();
 
   const gasAmount = await web3.eth.estimateGas({
     to: contractAddress,
@@ -197,6 +204,7 @@ async function getAddresses(contractAddress) {
 // export {ViewMedicalRecord};
 
 module.exports = {
+  createHash,
   deploy,
   ViewMedicalRecord,
   CreateMedicalRecord,

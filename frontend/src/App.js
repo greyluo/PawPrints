@@ -22,6 +22,7 @@ import EditPet from './components/EditPet';
 import useToken from './components/useToken';
 import useRole from './components/useRole';
 import LinkPet from './components/LinkPet';
+import AddRecord from './components/AddRecord';
 import { useEffect } from 'react';
 
 function Copyright(props) {
@@ -97,7 +98,9 @@ function App() {
               <Route path="/petview/:id" element={<PetView role={role} token={token}  />} />
               <Route path="/editpet" element={<EditPet  />} />
               <Route path="/signup" element={<SignUp />} />
+
               {role==="hospital" && <Route path="/linkPet" element={<LinkPet token = {token} />} />}
+              {role==="hospital" && <Route path="/addRecord/:id" element={<AddRecord token = {token} />} />}
 
             </Routes>
             <Copyright sx={{ pt: 4 }} />

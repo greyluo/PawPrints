@@ -42,7 +42,8 @@ function PetTable({token,setToken}) {
         setSearchTerm(event.target.value);
       };
       const filteredData = data.filter((item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.owner_name.toLowerCase().includes(searchTerm.toLowerCase())
+      item.staff_name.toLowerCase().includes(searchTerm.toLowerCase()) || item.owner_name.toLowerCase().includes(searchTerm.toLowerCase())
+      || item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (

@@ -21,6 +21,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { useNavigate } from 'react-router-dom';
 
 
+
 //react function component
 function AddPet({token}) {
   const navigate = useNavigate();
@@ -136,7 +137,6 @@ function AddPet({token}) {
           <Box component="form" onSubmit={handleSubmit} sx={{ padding: 5 }}>
 
             <Grid container spacing={3} >
-            {/*  Add a title for the form */}
                 <Grid item  xs={12}>
                     <Box display="flex" justifyContent="center">
                     <Typography variant="h4" component="h4" gutterBottom  fontWeight="bold">
