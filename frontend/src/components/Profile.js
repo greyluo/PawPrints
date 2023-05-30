@@ -50,7 +50,6 @@ const Profile = ({token, role,setToken}) => {
                 color: 'text.secondary',
               }}
             >
-              {console.log(user)}
               <Grid container spacing={2}>
                 <Grid item xs={12} sm container>
                   <Grid item xs container direction="column" spacing={2}>
