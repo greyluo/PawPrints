@@ -294,7 +294,7 @@ app.put('/verifyPetToken',authenticateUser,(req, res) => {
   });
 
   // Do something with the petId and name...
-  // New medical record
+
   res.status(200).json({ petId });
 });
 
