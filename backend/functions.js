@@ -4,11 +4,11 @@ require("dotenv").config();
 const fs = require("fs");
 const { abi, bytecode } = JSON.parse(fs.readFileSync("../backend/build/contracts/PawPrints.json"));
 const web3 = new Web3('https://rpc-mumbai.maticvigil.com');
-const Tx = require('@ethereumjs/tx').Transaction;
+// const Tx = require('@ethereumjs/tx').Transaction;
 
 async function deploy(privateKey) {
   // Configuring the connection to an Ethereum node
-  const network = process.env.ETHEREUM_NETWORK;
+  const network = "Polygon Mumbai Testnet";
     // Creating a signing account from a private key
   const signer = web3.eth.accounts.privateKeyToAccount(privateKey);
   web3.eth.accounts.wallet.add(signer);
@@ -151,6 +151,16 @@ function sign(tx, privateKey){
   });
 }
 
+async function getAddresses (contractAddress){
+  var PawPrints = new web3.eth.Contract(abi, contractAddress);
+  const ownerAddress = await PawPrints.methods.owner().call();
+  const insuranceAddress = await PawPrints.methods.insuranceProvider().call();
+  const hospitalAddress = await PawPrints.methods.hospital().call();
+
+  console.log("ownerAddress: ", ownerAddress);
+  console.log("hospitalAddress: ", hospitalAddress);
+  console.log("insurance: ", insuranceAddress);
+}
 
 // export {ViewMedicalRecord};
 
@@ -160,5 +170,8 @@ module.exports = {deploy,
                   setInsurance, 
                   CreateAccount, 
                   verify, 
-                  reimbursement
+                  reimbursement,
+                  getAddresses
 };
+
+getAddresses("0x83b4F166e1eA0f04238f0a7a0347275895CaC0D0");
