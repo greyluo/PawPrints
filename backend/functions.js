@@ -60,7 +60,9 @@ async function CreateAccount() {
 
   // Open this on demo day
 
-  // sign(tx,"8a44399ff29f878fdfa6cd371f7a7e6655240c211ceea62ea0566fe7bc82dbfe")
+  // Sending from PawPrints Faucet
+
+  // sign(tx,"a254cb9526dcf8f72a89542ab38ca63301e8acf55d7bb8cfb5c81afe4b60d686")
   // .then(
   //   web3.eth.getBalance(newAddress)
   //   .then(balance => {
