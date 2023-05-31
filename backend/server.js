@@ -347,7 +347,7 @@ app.post('/createRecord',authenticateUser,async (req, res) =>{
   const findOwner ='SELECT address FROM users WHERE id = ?';
   const ownerInfo = await pool.query(findOwner, [ownerId]);
   const ownerAddress = ownerInfo[0][0].address;
-  const billAmount = procedureFee + medicationFee;
+  const billAmount = parseInt(procedureFee) + parseInt(medicationFee);
 
   const hash = functions.createHash(petId, hospitalId, visitedDate, diagnosis, procedure, prescription, procedureFee, medicationFee);
   const recordId = rows.insertId;  console.log(contractAddress, address, private_key, ownerId, petId, billAmount, recordId, ownerAddress, "0x"+hash)
