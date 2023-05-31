@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardActions, CardMedia, Typography, Box, Button, Paper, Grid } from '@mui/material';
 import dogImage from '../assets/images/pets/dog1.jpg';
+import catImage from '../assets/images/pets/cat1.jpg';
 import CakeIcon from '@mui/icons-material/Cake';
 import PetsIcon from '@mui/icons-material/Pets';
 import GenderMaleIcon from '@mui/icons-material/Male';
@@ -27,7 +28,7 @@ const PetView = ({role,token}) => {
       });
 
       const data = await response.json();
-      
+
       if (response.ok) {
         navigator.clipboard.writeText(data.token);
         setShowAlert(true);
@@ -69,7 +70,7 @@ const PetView = ({role,token}) => {
           <Card sx={{ display: 'flex', flexDirection: 'row' }}>
             <CardMedia
               sx={{ width: 400 }}
-              image={dogImage} // Replace 'dogImage' with the actual image URL or import statement for the pet's image
+              image={species==="DOG"?dogImage:catImage} // Replace 'dogImage' with the actual image URL or import statement for the pet's image
               title={name}
             />
             <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
@@ -81,7 +82,7 @@ const PetView = ({role,token}) => {
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <PetsIcon />
                     <Typography variant="body2" color="text.secondary">
-                      Species: {species}
+                      Species: {species==="CAT"?"Cat":"Dog"} {/* Replace with the actual species */}
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

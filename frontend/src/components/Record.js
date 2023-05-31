@@ -72,7 +72,7 @@ function Record({ token}) {
                 </ListItem>
                 <Link href = {`https://mumbai.polygonscan.com/tx/${record.transaction_hash}`}  color="inherit" >
                 <ListItem>
-                  <ListItemText primary="Record Chain Address"/>
+                  <ListItemText primary="View it on Polygon"/>
                 </ListItem>
                 </Link>
 
