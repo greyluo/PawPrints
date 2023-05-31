@@ -45,9 +45,9 @@ export default function RecordList({ role, token, id}) {
             <Typography variant="h4" component="h4" gutterBottom>
               Medical Records
             </Typography>
-            <Button variant="contained" component={Link} to={address}>
+            {role==="hospital"&&<Button variant="contained" component={Link} to={address}>
                 <AddIcon />
-            </Button>
+            </Button>}
           </Box>
           <Typography variant="body2" color="text.secondary">
           {medicalRecords.map(record => (

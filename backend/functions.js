@@ -50,7 +50,7 @@ async function CreateAccount() {
    * As demo, we will be sending 0.01 matic to the new account
    * for it to perform test transactions, this will be resolved in future
    */
-  const amount = web3.utils.toWei('0.01', 'ether'); // 1 MATIC
+  const amount = web3.utils.toWei('0.03', 'ether'); // 1 MATIC
   const gasLimit = 21000; // Gas limit for a basic transfer
   const tx = {
     to: newAddress,

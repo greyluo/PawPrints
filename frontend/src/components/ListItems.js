@@ -13,14 +13,14 @@ import Link from '@mui/material/Link';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useState, useEffect } from 'react';
 
-export function MainListItems({setToken}) {
+export function MainListItems({setToken,role}) {
   const handleLogout = () => {
     setToken({token:null});
   };
 
   return (
     <React.Fragment>
-    <Link href="/dashboard" underline="none" color="inherit">
+    {role==="hospital"&&<Link href="/dashboard" underline="none" color="inherit">
       <ListItemButton>
         <ListItemIcon>
           <DashboardIcon />
@@ -28,7 +28,7 @@ export function MainListItems({setToken}) {
         <ListItemText primary="Dashboard" />
 
       </ListItemButton>
-      </Link>
+      </Link>}
       <Link href="/profile" underline="none" color="inherit">
       <ListItemButton>
         <ListItemIcon>

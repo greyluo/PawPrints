@@ -328,40 +328,35 @@ app.post('/createRecord',authenticateUser,async (req, res) =>{
 
   // 我们想从table里拿到 address和privatekey两个column里的数据
   const {address, private_key} = hospitalInfo[0][0];
-
-  // 用hospital的密钥deploy合约
-  const contractAddress = await functions.deploy(private_key);
-
   const {petId, visitedDate, diagnosis, procedure, prescription, procedureFee, medicationFee, notes, title } = req.body;
-  console.log(title)
 
   //Find owner id by pet id
   try {
   const findOwnerByPet = 'SELECT owner_id FROM pets WHERE id = ?';
   const petInfo = await pool.query(findOwnerByPet, [petId]);
   const ownerId = petInfo[0][0].owner_id;
-
+  const [rows] = await pool.query(
+    `INSERT INTO medical_records (pet_id, hospital_id, visited_date, diagnosis, medical_procedure, prescription, procedure_fee, medication_fee, notes, title)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [parseInt(petId), hospitalId, visitedDate, diagnosis, procedure, prescription, parseInt(procedureFee), parseInt(medicationFee), notes, title]
+  );
+  res.status(200).json({ message: 'Record created successfully' });
+  const contractAddress = await functions.deploy(private_key);
 
   // Finding address of owner by ID
   const findOwner ='SELECT address FROM users WHERE id = ?';
   const ownerInfo = await pool.query(findOwner, [ownerId]);
   const ownerAddress = ownerInfo[0][0].address;
   const billAmount = procedureFee + medicationFee;
-  const [rows] = await pool.query(
-    `INSERT INTO medical_records (pet_id, hospital_id, visited_date, diagnosis, medical_procedure, prescription, procedure_fee, medication_fee, notes, title)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [parseInt(petId), hospitalId, visitedDate, diagnosis, procedure, prescription, parseInt(procedureFee), parseInt(medicationFee), notes, title]
-  );
+
   const hash = functions.createHash(petId, hospitalId, visitedDate, diagnosis, procedure, prescription, procedureFee, medicationFee);
-  const recordId = rows.insertId;
-  console.log(contractAddress, address, private_key, ownerId, petId, billAmount, recordId, ownerAddress, "0x"+hash)
+  const recordId = rows.insertId;  console.log(contractAddress, address, private_key, ownerId, petId, billAmount, recordId, ownerAddress, "0x"+hash)
   const transactionHash = await functions.CreateMedicalRecord(
     contractAddress, address, private_key,
     ownerId, petId, billAmount, recordId, ownerAddress, "0x"+hash
   );
   const sql = `UPDATE medical_records SET transaction_hash = ? WHERE id = ?`;
   pool.query(sql, [transactionHash, recordId]);
-  res.status(200).json({ message: 'Record created successfully', recordId: recordId });
 
   } catch (err) {
     console.error(err);

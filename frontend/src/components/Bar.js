@@ -150,7 +150,7 @@ export default function Bar({setToken, token, role}) {
 
           <List component="nav">
 
-            <MainListItems setToken={setToken}></MainListItems>
+            <MainListItems setToken={setToken} role={role}></MainListItems>
             <Divider variant="middle" sx={{ my: 1 }} />
             <SecondaryListItems setToken={setToken} open = {open} token ={token} role={role}>
             </SecondaryListItems>
