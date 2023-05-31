@@ -26,6 +26,13 @@ contract PawPrints {
                 invalid}
     State public state;
 
+    event recordCreated(string message, 
+                        uint ownerId,
+                        uint petId,
+                        uint billAmount,
+                        uint recordId,
+                        bytes32 hashRecord);
+
     // Hospital will be the one deploying the contract
     constructor() {
         hospital = msg.sender;
@@ -85,6 +92,13 @@ contract PawPrints {
         newRecord.hashRecord = _hashRecord;
 
         state = State.visitedHospital;
+
+        emit recordCreated("Record Created",
+                            _ownerId,
+                            _petId,
+                            _billAmount,
+                            _recordId,
+                            _hashRecord);
     }
 
     function setInsurance (address insuranceAddress) 
